@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +10,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    String title = 'Flutter Demo';
+    const title = 'Flutter Demo';
     return MaterialApp(
       title: title,
       theme: ThemeData(
@@ -53,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _countSum();
   }
 
-  bool _validateIfValueIsInteger(value){
+  bool _validateIfValueIsInteger(String value){
     return int.tryParse(value) != null;
   }
 
@@ -105,14 +104,14 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            !_isInputValid ? const Text(
-              'Only digits allowed!',
+            if (_isInputValid) const Text('') else const Text(
+               'Only digits allowed!',
               style: TextStyle(
-                color: Colors.red
+                color: Colors.red,
               ),
-            ) : const Text(""),
+            ),
             SizedBox(
-              width: 300.0,
+              width: 300,
               height: 75,
               child: TextFormField(
                 controller: _controller,
@@ -143,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
             FloatingActionButton(
               onPressed: _clearAllFieds,
               child: const Icon(Icons.clear),
-            )
+            ),
           ],
         ),
       ),
