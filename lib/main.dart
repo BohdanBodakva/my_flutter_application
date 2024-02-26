@@ -7,7 +7,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     const title = 'Flutter Demo';
@@ -15,7 +14,6 @@ class MyApp extends StatelessWidget {
       title: title,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
       ),
       home: const MyHomePage(),
     );
@@ -103,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: [
             if (_isInputValid) const Text('') else const Text(
                'Only digits allowed!',
               style: TextStyle(
