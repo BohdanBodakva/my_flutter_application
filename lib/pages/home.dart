@@ -33,9 +33,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: MyAppBar(preferredHeight: mediaQuery.size.height * 0.07,),
       body: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: mediaQuery.size.width * 0.05, 
-          vertical: mediaQuery.size.width * 0.05,
+        padding: EdgeInsets.only(
+          bottom: mediaQuery.size.width * 0.05, 
+          left: mediaQuery.size.width * 0.05,
+          right: mediaQuery.size.width * 0.05,
         ),
         child: Center(
           child: Column(

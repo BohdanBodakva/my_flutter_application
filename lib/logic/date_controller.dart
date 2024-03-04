@@ -1,4 +1,33 @@
+import 'package:my_flutter_application/instances/dateUsed.dart';
+
 class DateController{
+
+  static DateUsed generateNextDateAndFormatIt(int weekday, int month, int day){
+    final DateTime nextDay = DateTime.now().add(const Duration(days: 1));
+
+    return DateUsed(
+      day: nextDay.day, 
+      month: nextDay.month, 
+      monthName: getMonthByPosition(nextDay.month), 
+      dayOfWeek: nextDay.weekday, 
+      dayOfWeekName: getWeekdayByPosition(nextDay.weekday), 
+      year: nextDay.year,
+    );
+  }
+
+  static DateUsed generatePreviousDateAndFormatIt(int weekday, int month, int day){
+    final DateTime dayBefore = DateTime.now().subtract(const Duration(days: 1));
+
+    return DateUsed(
+      day: dayBefore.day, 
+      month: dayBefore.month, 
+      monthName: getMonthByPosition(dayBefore.month), 
+      dayOfWeek: dayBefore.weekday, 
+      dayOfWeekName: getWeekdayByPosition(dayBefore.weekday), 
+      year: dayBefore.year,
+    );
+  }
+
   static String getMonthByPosition(int position){
     switch(position){
       case 1:
