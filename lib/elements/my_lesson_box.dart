@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:my_flutter_application/elements/my_add_button.dart';
+import 'package:my_flutter_application/enums/font_size.dart';
 import 'package:my_flutter_application/instances/lecture.dart';
 
 
@@ -26,7 +27,7 @@ class _MyLessonBoxState extends State<MyLessonBox> {
     final mediaQuery = MediaQuery.of(context);
 
     return Container(
-      height: mediaQuery.size.width * 0.45,
+      height: mediaQuery.size.height * 0.27,
       decoration: BoxDecoration(
           border: Border.all(
             color: const Color.fromARGB(255, 20, 111, 185),
@@ -41,31 +42,52 @@ class _MyLessonBoxState extends State<MyLessonBox> {
             child: SizedBox(
               width: mediaQuery.size.width * 0.15,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  const Text('Лекція:'),
-                  Text(
-                    '${widget.lecture.lectionNumber}',
-                    style: const TextStyle(
-                      fontSize: 25,
+                  Column(
+                    children: [
+                      Text(
+                    'Лекція:',
+                    style: TextStyle(
+                      fontSize: MyFontSize.getFontSize(context, 1),
                     ),
                   ),
-                  Container(height: 18,),
-                  const Text('Час:'),
+                  Text(
+                    '${widget.lecture.lectionNumber}',
+                    style: TextStyle(
+                      fontSize: MyFontSize.getFontSize(context, 4),
+                    ),
+                  ),
+                    ],
+                  ),
+                  
+                  // Container(height: 18,),
+                  Column(
+                    children: [
+                      Text(
+                    'Час:',
+                    style: TextStyle(
+                      fontSize: MyFontSize.getFontSize(context, 1),
+                    ),
+                  ),
                   Container(height: 4,),
                   Text(
                     '${widget.lecture.startTime.hour}:'
                     '${widget.lecture.startTime.minute}',
-                    style: const TextStyle(
-                      fontSize: 18,
+                    style: TextStyle(
+                      fontSize: MyFontSize.getFontSize(context, 2),
                     ),
                   ),
                   Text(
                     '${widget.lecture.endTime.hour}:'
                     '${widget.lecture.endTime.minute}',
-                    style: const TextStyle(
-                      fontSize: 18,
+                    style: TextStyle(
+                      fontSize: MyFontSize.getFontSize(context, 2),
                     ),
                   ),
+                    ],
+                  )
+                  
                 ],
               ),
             ),
@@ -86,8 +108,8 @@ class _MyLessonBoxState extends State<MyLessonBox> {
                 children: [
                   Text(
                     widget.lecture.lectureName,
-                    style: const TextStyle(
-                      fontSize: 18,
+                    style: TextStyle(
+                      fontSize: MyFontSize.getFontSize(context, 2),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -95,16 +117,16 @@ class _MyLessonBoxState extends State<MyLessonBox> {
                       children: [
                         Text(
                           widget.lecture.lecturer,
-                          style: const TextStyle(
-                            fontSize: 12,
+                          style: TextStyle(
+                            fontSize: MyFontSize.getFontSize(context, 1),
                           ),
                         ),
                         Text(
                           '${widget.lecture.building} кор., '
                           '${widget.lecture.room} ауд.',
 
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: MyFontSize.getFontSize(context, 1),
                             fontWeight: FontWeight.bold,
                           ),
                         ),

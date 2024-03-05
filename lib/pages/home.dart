@@ -35,7 +35,6 @@ class _HomePageState extends State<HomePage> {
       appBar: MyAppBar(title: 'Розклад НУ "ЛП"', preferredHeight: mediaQuery.size.height * 0.07,),
       body: Container(
         padding: EdgeInsets.only(
-          bottom: mediaQuery.size.width * 0.05, 
           left: mediaQuery.size.width * 0.05,
           right: mediaQuery.size.width * 0.05,
         ),

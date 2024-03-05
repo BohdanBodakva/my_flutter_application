@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:my_flutter_application/enums/font_size.dart';
 import 'package:my_flutter_application/instances/dateUsed.dart';
 import 'package:my_flutter_application/logic/date_controller.dart';
 
@@ -112,8 +113,8 @@ class _SubGroupState extends State<SubGroup> {
                     DateTime.now().month,
                     )}', 
 
-                  style: const TextStyle(
-                    fontSize: 22,
+                  style: TextStyle(
+                    fontSize: MyFontSize.getFontSize(context, 3),
                   ),
                 ),
             ), 
@@ -148,14 +149,24 @@ class _SubGroupState extends State<SubGroup> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('чисельник'),
+              Text(
+                'чисельник',
+                style: TextStyle(
+                  fontSize: MyFontSize.getFontSize(context, 1),
+                ),
+              ),
               
               Container(
                 height: mediaQuery.size.height * 0.025,
                 width: 2,
                 color: const Color.fromARGB(255, 20, 111, 185),
               ),
-              Text(' 1 група'),
+              Text(
+                ' 1 група',
+                style: TextStyle(
+                  fontSize: MyFontSize.getFontSize(context, 1),
+                ),
+              ),
             ],
           ),
         ),

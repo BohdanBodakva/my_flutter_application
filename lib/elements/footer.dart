@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_flutter_application/enums/font_size.dart';
 
 class Footer extends StatefulWidget {
   const Footer({super.key});
@@ -14,20 +15,32 @@ class _FooterState extends State<Footer> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
 
-    return SizedBox(
+    return Container(
       // width: _mediaQuery.size.width,
-      height: mediaQuery.size.height * 0.07,
-      child: Row(
+      height: mediaQuery.size.height * 0.075,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            height: 2.5,
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
+          Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           TextButton(
             onPressed: () => {
               Navigator.pushNamed(context, '/', arguments: null,),
             },
-            child: const Column(
+            child: Column(
               children: [
                 Icon(Icons.home),
-                Text('Розклад'),
+                Text(
+                  'Розклад',
+                  style: TextStyle(
+                    fontSize: MyFontSize.getFontSize(context, 1),
+                  ),
+                ),
               ],
             ),
           ),
@@ -35,10 +48,15 @@ class _FooterState extends State<Footer> {
             onPressed: () => {
               Navigator.pushNamed(context, '/calendar', arguments: null,),
             },
-            child: const Column(
+            child: Column(
               children: [
                 Icon(Icons.calendar_today),
-                Text('Календар'),
+                Text(
+                  'Календар',
+                  style: TextStyle(
+                    fontSize: MyFontSize.getFontSize(context, 1),
+                  ),
+                ),
               ],
             ),
           ),
@@ -46,15 +64,23 @@ class _FooterState extends State<Footer> {
             onPressed: () => {
               Navigator.pushNamed(context, '/profile', arguments: null,),
             },
-            child: const Column(
+            child: Column(
               children: [
-                Icon(Icons.man),
-                Text('Профіль'),
+                const Icon(Icons.man),
+                Text(
+                  'Профіль',
+                  style: TextStyle(
+                    fontSize: MyFontSize.getFontSize(context, 1),
+                  ),
+                ),
               ],
             ),
           ),
         ],
       ),
+        ],
+      ),
+       
     );
   }
 }

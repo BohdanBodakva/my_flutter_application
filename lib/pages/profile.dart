@@ -6,6 +6,7 @@ import 'package:my_flutter_application/elements/my_add_button.dart';
 import 'package:my_flutter_application/elements/my_app_bar.dart';
 import 'package:my_flutter_application/elements/my_input_form.dart';
 import 'package:my_flutter_application/elements/settings_item.dart';
+import 'package:my_flutter_application/enums/font_size.dart';
 // import 'package:my_flutter_application/logic/storage.dart';
 import 'package:my_flutter_application/main.dart';
 // import 'package:my_flutter_application/main.dart';
@@ -31,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final mediaQuery = MediaQuery.of(context);
 
     final formHeight = mediaQuery.size.height * 0.25;
-    final formWidth = mediaQuery.size.width * 0.25;
+    final formWidth = mediaQuery.size.width * 0.6;
 
     return Scaffold(
       appBar: MyAppBar(title: 'Профіль', preferredHeight: mediaQuery.size.height * 0.07,),
@@ -46,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
               Column(
                 children: [
                   Container(
-                    width: mediaQuery.size.width * 0.33,
+                    width: mediaQuery.size.width * 0.29,
                     child: Image.asset('assets/user.png'),
                   ),
 
@@ -54,10 +55,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     height: mediaQuery.size.width * 0.08,
                   ),
 
-                  const Text(
+                  Text(
                       'User',
                       style: TextStyle(
-                        fontSize: 22
+                        fontSize: MyFontSize.getFontSize(context, 5),
                       ),
                     ),
                   
@@ -65,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
 
               Container(
-                height: mediaQuery.size.height * 0.02,
+                height: mediaQuery.size.height * 0.03,
               ),
 
               SizedBox(
@@ -138,11 +139,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       text: 'Edit profile info',
                     ),
                     SettingsItem(
-                      onPressed: changeAppMode,
-                      icon: MyApp.rootKey.currentState!.darkMode ? 
-                        Icon(Icons.dark_mode) : 
-                        Icon(Icons.light_mode),
-                      text: 'Change app mode',
+                      onPressed: () => {},
+                      icon: const Icon(Icons.refresh),
+                      text: 'Group settings',
                     ),
                     SettingsItem(
                       onPressed: () => {},
@@ -150,6 +149,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       text: 'Refresh schedule',
                     ),
                     SettingsItem(
+                      onPressed: changeAppMode,
+                      icon: MyApp.rootKey.currentState!.darkMode ? 
+                        Icon(Icons.dark_mode) : 
+                        Icon(Icons.light_mode),
+                      text: 'Change app mode',
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SettingsItem(
+                          itemWidthSubtraction: 0.46,
                       onPressed: () => {
                         showDialog(
                           context: context,
@@ -164,10 +174,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       text: 'About',
                     ),
                     SettingsItem(
+                      itemWidthSubtraction: 0.46,
                       onPressed: () => {},
                       icon: const Icon(Icons.settings),
                       text: 'Log Out',
                     ),
+                      ],
+                    ),
+                    
                   ],
                 ),
               )

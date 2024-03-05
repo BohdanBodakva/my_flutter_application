@@ -19,9 +19,7 @@ class InfoDialog extends StatefulWidget{
 }
 
 class _InfoDialogState extends State<InfoDialog> with WidgetsBindingObserver {
-
-  double _dialogHeight = 500;
-  double i = 0;
+  bool isKeyboardVisible = false;
 
   @override
   void initState() {
@@ -37,33 +35,56 @@ class _InfoDialogState extends State<InfoDialog> with WidgetsBindingObserver {
 
   @override
   void didChangeMetrics() {
-    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    super.didChangeMetrics();
+    final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
     setState(() {
-      // if(keyboardHeight < 500){
-      //   _dialogHeight = 400;
-      // } else {
-        // i = _dialogHeight / (MediaQuery.of(context).size.height - keyboardHeight);
-
-        // _dialogHeight = MediaQuery.of(context).size.height - keyboardHeight + 207;
-
-      // }
-      
+      isKeyboardVisible = bottomInset > 0;
     });
   }
 
+
+
+
+
+
+  double _dialogHeight = 500;
+  double i = 0;
+
   @override
   Widget build(BuildContext context) {
+
+
+
     
-                return 
-         SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          // scrollDirection: Axis.vertical,
-          child: AlertDialog(
-        content: SingleChildScrollView(
-          
-          child: SizedBox(
-            // height: _dialogHeight,
+
+
+
+    // ===================================
+
+    final mediaQuery = MediaQuery.of(context);
+
+    double dialogHeight = 0;
+
+    if (widget.type == 0) {
+      dialogHeight = mediaQuery.size.height * 0.3;
+    }
+    else if (widget.type == 1) {
+      dialogHeight = mediaQuery.size.height * 0.7;
+    }
+    
+    return SizedBox(
+      child: AlertDialog(
+      content: Column(
+        children: [
+            Text('sdfdsfsdfd'),
+            Container(
+              height: isKeyboardVisible ? dialogHeight * 0.3 : dialogHeight,
+              child: SingleChildScrollView(
+          // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.,
+          child: Container(
+            // height: isKeyboardVisible ? dialogHeight * 0.3 : dialogHeight,
+          width: mediaQuery.size.width,
+          // color: Colors.amber,
             child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
 
@@ -73,7 +94,15 @@ class _InfoDialogState extends State<InfoDialog> with WidgetsBindingObserver {
     )
           ),
           
-        ) 
+        ),
+            ),
+            
+
+
+        Text('sdfdsdsfdsfds')
+          ],
+        ), 
+         
         
     )
 );

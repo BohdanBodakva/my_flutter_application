@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_flutter_application/enums/font_size.dart';
 
 class MyAppBar extends StatefulWidget implements PreferredSizeWidget{
   final double preferredHeight;
@@ -22,7 +23,12 @@ class _MyAppBarState extends State<MyAppBar> {
       centerTitle: true,
       automaticallyImplyLeading: false,
       backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      title: Text(widget.title),
+      title: Text(
+        widget.title,
+        style: TextStyle(
+          fontSize: MyFontSize.getFontSize(context, 3),
+        ),
+      ),
     );
   }
 }
