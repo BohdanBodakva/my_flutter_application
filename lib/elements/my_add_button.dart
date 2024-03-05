@@ -28,6 +28,7 @@ class MyAddButton extends StatelessWidget{
         ),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text( 
             buttonText,
@@ -38,8 +39,10 @@ class MyAddButton extends StatelessWidget{
             ),
           ),
           if (homeworkIsPresent)
-            Container(padding: const EdgeInsets.only(left: 8),),
-            const Icon(Icons.notification_important),
+            Container(
+              padding: const EdgeInsets.only(left: 8),
+              child: const Icon(Icons.notification_important),
+            ),
         ],
       ) ,
     );

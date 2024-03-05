@@ -31,7 +31,8 @@ class _HomePageState extends State<HomePage> {
     final mediaQuery = MediaQuery.of(context);
 
     return Scaffold(
-      appBar: MyAppBar(preferredHeight: mediaQuery.size.height * 0.07,),
+      resizeToAvoidBottomInset: true,
+      appBar: MyAppBar(title: 'Розклад НУ "ЛП"', preferredHeight: mediaQuery.size.height * 0.07,),
       body: Container(
         padding: EdgeInsets.only(
           bottom: mediaQuery.size.width * 0.05, 
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               SizedBox(
-                height: mediaQuery.size.height * 0.065,
+                height: mediaQuery.size.height * 0.088,
                 child: const SubGroup(),
               ),
               SizedBox(

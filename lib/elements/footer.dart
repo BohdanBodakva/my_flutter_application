@@ -21,7 +21,9 @@ class _FooterState extends State<Footer> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           TextButton(
-            onPressed: () => {},
+            onPressed: () => {
+              Navigator.pushNamed(context, '/', arguments: null,),
+            },
             child: const Column(
               children: [
                 Icon(Icons.home),
@@ -30,7 +32,9 @@ class _FooterState extends State<Footer> {
             ),
           ),
           TextButton(
-            onPressed: () => {},
+            onPressed: () => {
+              Navigator.pushNamed(context, '/calendar', arguments: null,),
+            },
             child: const Column(
               children: [
                 Icon(Icons.calendar_today),
@@ -39,7 +43,9 @@ class _FooterState extends State<Footer> {
             ),
           ),
           TextButton(
-            onPressed: () => {},
+            onPressed: () => {
+              Navigator.pushNamed(context, '/profile', arguments: null,),
+            },
             child: const Column(
               children: [
                 Icon(Icons.man),

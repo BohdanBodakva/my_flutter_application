@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:my_flutter_application/instances/dateUsed.dart';
 import 'package:my_flutter_application/logic/date_controller.dart';
 
@@ -78,24 +80,30 @@ class _SubGroupState extends State<SubGroup> {
     final mediaQuery = MediaQuery.of(context);
 
     return Container(
-      child: Row(
+      width: mediaQuery.size.width,
+      // color: Colors.amber,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            height: mediaQuery.size.height * 0.04,
+            child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
+            width: mediaQuery.size.width * 0.12,
             child: TextButton(
               onPressed: _scrollToPreviousItem,
-              child: const Icon(Icons.arrow_back),
+              child: const Icon(Icons.arrow_back, size: 22,),
             ),
           ),
 
-          SizedBox(
-            height: mediaQuery.size.height * 0.05,
-            width: 200,
-            child: ListView(
-              controller: _scrollController,
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                Text(
+          Container(
+            height: mediaQuery.size.height * 0.035,
+            width: mediaQuery.size.width * 0.55,
+            // color: Colors.black,
+            child: Center(
+              child: Text(
                   '${DateController.getWeekdayByPosition(
                     DateTime.now().weekday,
                     )}, '
@@ -108,25 +116,54 @@ class _SubGroupState extends State<SubGroup> {
                     fontSize: 22,
                   ),
                 ),
-              ],
-            ),
+            ), 
+              
+              
+            
           ),
 
           SizedBox(
+            width: mediaQuery.size.width * 0.12,
             child: TextButton(
               onPressed: _scrollToNextItem,
-              child: const Icon(Icons.arrow_forward),
+              child: const Icon(Icons.arrow_forward, size: 22,),
             ), 
           ),
-          SizedBox(
-            child: TextButton(
-              onPressed: _scrollToCurrentItem,
-              child: Container(),
-            ), 
-          ),
+          // SizedBox(
+          //   child: TextButton(
+          //     onPressed: _scrollToCurrentItem,
+          //     child: Container(),
+          //   ), 
+          // ),
         ],
       ),
+          )
+          ,
+
+
+        Container(
+          height: mediaQuery.size.height * 0.03,
+          width: mediaQuery.size.width * 0.45,
+          // color: Colors.amber,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text('чисельник'),
+              
+              Container(
+                height: mediaQuery.size.height * 0.025,
+                width: 2,
+                color: const Color.fromARGB(255, 20, 111, 185),
+              ),
+              Text(' 1 група'),
+            ],
+          ),
+        ),
+        ],
+      ) ,
     );
+    
+    
 
     
   }

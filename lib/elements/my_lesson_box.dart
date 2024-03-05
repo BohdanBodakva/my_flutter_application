@@ -29,7 +29,7 @@ class _MyLessonBoxState extends State<MyLessonBox> {
       height: mediaQuery.size.width * 0.45,
       decoration: BoxDecoration(
           border: Border.all(
-            color: const Color.fromARGB(213, 0, 0, 0),
+            color: const Color.fromARGB(255, 20, 111, 185),
             width: 2,
           ),
           borderRadius: BorderRadius.circular(20),
@@ -74,7 +74,7 @@ class _MyLessonBoxState extends State<MyLessonBox> {
             padding: const EdgeInsets.only(top: 14, bottom: 14, right: 10),
             child: Container(
               width: 1.5,
-              color: const Color.fromARGB(213, 0, 0, 0),
+              color: const Color.fromARGB(255, 20, 111, 185),
             ),
           ),
           Padding(

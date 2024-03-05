@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_flutter_application/elements/my_calendar.dart';
+import 'package:my_flutter_application/pages/home.dart';
 // import 'package:my_flutter_application/logic/storage.dart';
 import 'package:my_flutter_application/pages/profile.dart';
 
@@ -38,6 +40,13 @@ class _MyAppState extends State<_MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomePage(),
+        '/profile': (context) => ProfilePage(),
+        // '/auth', (context) => {},
+        '/calendar': (context) => MyCalendar(),
+      },
       theme: ThemeData(
         brightness: Brightness.light,
       ),
@@ -45,7 +54,6 @@ class _MyAppState extends State<_MyApp> {
         brightness: Brightness.dark,
       ),
       themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
-      home: ProfilePage(),
     );
   }
 
