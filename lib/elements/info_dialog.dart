@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:my_flutter_application/enums/font_size.dart';
 
 class InfoDialog extends StatefulWidget{
   final String title;
   final List<Widget> titleWidgets;
-  final String buttonText;
+  final Widget saveButton;
+  final String closeButtonText;
   final int type;
 
   InfoDialog({
     required this.title,
     required this.titleWidgets,
-    required this.buttonText,
+    required this.saveButton,
+    required this.closeButtonText,
     this.type = 0,
     super.key,
   });
@@ -42,167 +45,59 @@ class _InfoDialogState extends State<InfoDialog> with WidgetsBindingObserver {
     });
   }
 
-
-
-
-
-
-  double _dialogHeight = 500;
-  double i = 0;
-
   @override
   Widget build(BuildContext context) {
-
-
-
-    
-
-
-
-    // ===================================
-
     final mediaQuery = MediaQuery.of(context);
 
     double dialogHeight = 0;
 
     if (widget.type == 0) {
-      dialogHeight = mediaQuery.size.height * 0.3;
+      dialogHeight = mediaQuery.size.height * 0.15;
     }
     else if (widget.type == 1) {
-      dialogHeight = mediaQuery.size.height * 0.7;
+      dialogHeight = mediaQuery.size.height * 0.3;
     }
     
     return SizedBox(
+      // height: dialogHeight * 2,
       child: AlertDialog(
       content: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-            Text('sdfdsfsdfd'),
-            Container(
-              height: isKeyboardVisible ? dialogHeight * 0.3 : dialogHeight,
-              child: SingleChildScrollView(
-          // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.,
-          child: Container(
-            // height: isKeyboardVisible ? dialogHeight * 0.3 : dialogHeight,
-          width: mediaQuery.size.width,
-          // color: Colors.amber,
-            child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-
-          children: 
-        widget.titleWidgets
-
-    )
-          ),
-          
-        ),
+            Text(
+              widget.title,
+              style: TextStyle(
+                fontSize: MyFontSize.getFontSize(context, 4),
+              ),
             ),
-            
-
-
-        Text('sdfdsdsfdsfds')
+            SizedBox(
+              height: isKeyboardVisible ? dialogHeight * 0.5 : dialogHeight,
+              child: SingleChildScrollView(
+                child: SizedBox(
+                  width: mediaQuery.size.width,
+                  child: Column(
+                    children: widget.titleWidgets,
+                  ),
+                ), 
+              ),
+            ),
+            widget.saveButton
           ],
-        ), 
-         
-        
-    )
-);
-                  
-                 
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // double realInfoDialogHeight = 0, realInfoDialogWidth = 0;
-  // double infoDialogHeight = 0, infoDialogWidth = 0;
-
-  // bool scrollInfoDialog = false;
-
-
-
-  // @override
-  // Widget build(BuildContext context){
-  //   var mediaQuery = MediaQuery.of(context);
-
-  //   infoDialogHeight = 0;
-  //   realInfoDialogHeight = 0;
-  //   infoDialogWidth = 0;
-  //   realInfoDialogWidth = 0;
-
-    
-
-  //   if (widget.type == 0){
-  //     infoDialogHeight = mediaQuery.size.height * 0.2;
-  //     infoDialogWidth = mediaQuery.size.width * 0.4;
-  //   } else if (widget.type == 1) {
-  //     infoDialogHeight = mediaQuery.size.height * 0.75;
-  //     infoDialogWidth = mediaQuery.size.width * 0.85;
-
-  //     realInfoDialogHeight = mediaQuery.size.height * 0.75;
-  //     realInfoDialogWidth = mediaQuery.size.width * 0.85;
-  //   }
-
-  //   return AlertDialog(
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius:
-  //         BorderRadius.all(
-  //           Radius.circular(10),
-  //         ),
-  //       ),
-  //       content: Builder(
-  //         builder: (context) {
-  //           return SizedBox(
-  //             height: infoDialogHeight,
-  //             width: infoDialogWidth,
-  //             child: Center(
-  //               child: SizedBox(
-  //                 child: Padding(
-  //                   padding: const EdgeInsets.only(top: 12),
-  //                   child: Column(
-  //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                     children: [
-  //                       Text(
-  //                         widget.title,
-  //                         style: const TextStyle(
-  //                           fontSize: 22,
-  //                         ),
-  //                       ),
-
-  //                         Column(children: [
-  //                               for (var widg in widget.titleWidgets)
-  //                                 widg,
-  //                             ],
-  //                         ),
-                            
-                          
-
-  //                       TextButton(
-  //                         onPressed: () => {
-  //                           Navigator.of(context).pop(),
-  //                         },
-  //                         child: Text(widget.buttonText),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //           );
-  //         },
-  //       ),
-  //     );
-  // }
-}
+      ), 
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            widget.closeButtonText,
+          style: TextStyle(
+            fontSize: MyFontSize.getFontSize(context, 1),
+            ),
+          ),
+        ),
+      ],   
+    ),
+  );
+  }
 }

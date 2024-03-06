@@ -31,11 +31,14 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
 
-    final formHeight = mediaQuery.size.height * 0.25;
+    final formHeight = mediaQuery.size.height * 0.15;
     final formWidth = mediaQuery.size.width * 0.6;
 
     return Scaffold(
-      appBar: MyAppBar(title: 'Профіль', preferredHeight: mediaQuery.size.height * 0.07,),
+      appBar: MyAppBar(
+        title: 'Профіль', 
+        preferredHeight: mediaQuery.size.height * 0.07,
+      ),
       body: Container(
         padding: EdgeInsets.symmetric(
           vertical: mediaQuery.size.height * 0.02,
@@ -50,29 +53,23 @@ class _ProfilePageState extends State<ProfilePage> {
                     width: mediaQuery.size.width * 0.29,
                     child: Image.asset('assets/user.png'),
                   ),
-
                   Container(
                     height: mediaQuery.size.width * 0.08,
                   ),
-
                   Text(
                       'User',
                       style: TextStyle(
                         fontSize: MyFontSize.getFontSize(context, 5),
                       ),
                     ),
-                  
                 ],
               ),
-
               Container(
                 height: mediaQuery.size.height * 0.03,
               ),
-
               SizedBox(
                 height: mediaQuery.size.height * 0.47,
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SettingsItem(
                       onPressed: () {
@@ -82,30 +79,22 @@ class _ProfilePageState extends State<ProfilePage> {
                             title: 'Edit Profile',
                             titleWidgets:[
                               Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
                                   MyInputForm(
                                     height: formHeight, 
                                     width: formWidth,
                                     labelText: 'edit name',
-                                    onTap: () => {
-                                      
-                                    },
                                   ),
                                   MyInputForm(
                                     height: formHeight, 
                                     width: formWidth,
                                     labelText: 'edit surname',
-                                    onTap: () => {
-                                      
-                                    },
-                                  ),
-                                  // MyInputForm(
-                                  //   height: formHeight, 
-                                  //   width: formWidth,
-                                  //   labelText: 'edit group',
-                                  // ),
-                                  MyAddButton(
+                                  ),  
+                                ],
+                              ),
+                  ],
+                  saveButton: MyAddButton(
                                     onPressed: () => {
                                       showDialog(
                                         context: context,
@@ -113,24 +102,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                           title: 'change password',
                                           titleWidgets: [
                                             MyInputForm(
-                                    height: formHeight, 
-                                    width: formWidth,
-                                    labelText: 'enter password',
-                                    onTap: () => {
-                                      
-                                    },
-                                  )
+                                              height: formHeight, 
+                                              width: formWidth,
+                                              labelText: 'enter password',
+                                            )
                                           ],
-                                          buttonText: 'Close',
+                                          saveButton: Container(),
+                                          closeButtonText: 'Close',
                                         ),
                                       ),
                                     },
                                     buttonText: 'Change password',
                                   ),
-                                ],
-                              ),
-                  ],
-                            buttonText: 'Close',
+                            closeButtonText: 'Close',
                             type: 1,
                           ),
                         );
@@ -166,7 +150,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           builder: (_) => InfoDialog(
                             title: 'About this app',
                             titleWidgets: [Text('sdgdflkgjdfkg')],
-                            buttonText: 'Close',
+                            saveButton: Container(),
+                            closeButtonText: 'Close',
                           ),
                         ),
                       },
