@@ -11,7 +11,7 @@ class MyStorage{
       password: 'admin',
       name: 'Admin',
       schedule: Schedule(),
-      status: UserStatus.admin
+      status: UserStatus.admin,
     ),
   ];
 

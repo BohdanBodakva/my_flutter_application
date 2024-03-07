@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class MyInputForm extends StatelessWidget{
   final double height;
   final double width;
-  String labelText;
+  final String labelText;
 
-  MyInputForm({
+  const MyInputForm({
     required this.height,
     required this.width,
     this.labelText = '',

@@ -5,9 +5,9 @@ class SettingsItem extends StatelessWidget{
   final String text;
   final VoidCallback onPressed;
   final Icon icon;
-  double itemWidthSubtraction;
+  final double itemWidthSubtraction;
 
-  SettingsItem({
+  const SettingsItem({
     required this.onPressed, 
     this.itemWidthSubtraction = 1,
     this.icon = const Icon(Icons.disabled_by_default),
@@ -17,7 +17,7 @@ class SettingsItem extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    var mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.of(context);
 
     return SizedBox(
       width: mediaQuery.size.width * 0.85 * itemWidthSubtraction,
@@ -43,7 +43,7 @@ class SettingsItem extends StatelessWidget{
           ),
           Container(
             child: icon,
-          )
+          ),
         ],
       ),
     ),

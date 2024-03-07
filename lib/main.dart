@@ -5,11 +5,13 @@ import 'package:my_flutter_application/pages/home.dart';
 import 'package:my_flutter_application/pages/profile.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  static final GlobalKey<_MyAppState> rootKey = GlobalKey<_MyAppState>();
+  static final GlobalKey<MyAppState> rootKey = GlobalKey<MyAppState>();
+
+  const MyApp({super.key});
 
   dynamic getRootKey(){
     return rootKey;
@@ -28,13 +30,13 @@ class MyApp extends StatelessWidget {
 }
 
 class _MyApp extends StatefulWidget {
-  _MyApp({Key? key}) : super(key: key);
+  const _MyApp({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
-class _MyAppState extends State<_MyApp> {
+class MyAppState extends State<_MyApp> {
   bool darkMode = false;
 
   @override
@@ -42,10 +44,10 @@ class _MyAppState extends State<_MyApp> {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/': (context) => HomePage(),
-        '/profile': (context) => ProfilePage(),
+        '/': (context) => const HomePage(),
+        '/profile': (context) => const ProfilePage(),
         // '/auth', (context) => {},
-        '/calendar': (context) => MyCalendar(),
+        '/calendar': (context) => const MyCalendar(),
       },
       theme: ThemeData(
         brightness: Brightness.light,

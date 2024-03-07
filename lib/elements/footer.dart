@@ -15,7 +15,7 @@ class _FooterState extends State<Footer> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
 
-    return Container(
+    return SizedBox(
       // width: _mediaQuery.size.width,
       height: mediaQuery.size.height * 0.075,
       child: Column(
@@ -34,7 +34,7 @@ class _FooterState extends State<Footer> {
             },
             child: Column(
               children: [
-                Icon(Icons.home),
+                const Icon(Icons.home),
                 Text(
                   'Розклад',
                   style: TextStyle(
@@ -50,7 +50,7 @@ class _FooterState extends State<Footer> {
             },
             child: Column(
               children: [
-                Icon(Icons.calendar_today),
+                const Icon(Icons.calendar_today),
                 Text(
                   'Календар',
                   style: TextStyle(

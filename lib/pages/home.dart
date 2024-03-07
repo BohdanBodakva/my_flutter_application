@@ -32,7 +32,10 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: MyAppBar(title: 'Розклад НУ "ЛП"', preferredHeight: mediaQuery.size.height * 0.07,),
+      appBar: MyAppBar(
+        title: 'Розклад НУ "ЛП"', 
+        preferredHeight: mediaQuery.size.height * 0.07,
+      ),
       body: Container(
         padding: EdgeInsets.only(
           left: mediaQuery.size.width * 0.05,

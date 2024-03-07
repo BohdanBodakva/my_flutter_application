@@ -86,8 +86,7 @@ class _MyLessonBoxState extends State<MyLessonBox> {
                     ),
                   ),
                     ],
-                  )
-                  
+                  ),
                 ],
               ),
             ),

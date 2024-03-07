@@ -1,4 +1,4 @@
-import 'package:my_flutter_application/instances/dateUsed.dart';
+import 'package:my_flutter_application/instances/date_used.dart';
 
 class DateController{
 
@@ -15,7 +15,9 @@ class DateController{
     );
   }
 
-  static DateUsed generatePreviousDateAndFormatIt(int weekday, int month, int day){
+  static DateUsed generatePreviousDateAndFormatIt(
+    int weekday, int month, int day,
+  ){
     final DateTime dayBefore = DateTime.now().subtract(const Duration(days: 1));
 
     return DateUsed(

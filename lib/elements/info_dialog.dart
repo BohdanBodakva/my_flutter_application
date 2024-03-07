@@ -7,12 +7,14 @@ class InfoDialog extends StatefulWidget{
   final Widget saveButton;
   final String closeButtonText;
   final int type;
+  final List<Widget> bottomWidgets;
 
-  InfoDialog({
+  const InfoDialog({
     required this.title,
     required this.titleWidgets,
     required this.saveButton,
     required this.closeButtonText,
+    this.bottomWidgets = const [],
     this.type = 0,
     super.key,
   });
@@ -49,19 +51,22 @@ class _InfoDialogState extends State<InfoDialog> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
 
+    final widgetList = [...widget.titleWidgets, ...widget.bottomWidgets];
+
     double dialogHeight = 0;
 
     if (widget.type == 0) {
-      dialogHeight = mediaQuery.size.height * 0.15;
+      dialogHeight = mediaQuery.size.height * 0.22;
     }
     else if (widget.type == 1) {
-      dialogHeight = mediaQuery.size.height * 0.3;
+      dialogHeight = mediaQuery.size.height * 0.37;
     }
     
     return SizedBox(
-      // height: dialogHeight * 2,
       child: AlertDialog(
-      content: Column(
+      content: SizedBox(
+        height: mediaQuery.size.height * 0.55,
+        child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
             Text(
@@ -76,14 +81,15 @@ class _InfoDialogState extends State<InfoDialog> with WidgetsBindingObserver {
                 child: SizedBox(
                   width: mediaQuery.size.width,
                   child: Column(
-                    children: widget.titleWidgets,
+                    children: widgetList,
                   ),
                 ), 
               ),
             ),
-            widget.saveButton
+            widget.saveButton,
           ],
-      ), 
+      ),
+      ),  
       actions: <Widget>[
         TextButton(
           onPressed: () {

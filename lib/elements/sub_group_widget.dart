@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
-import 'package:my_flutter_application/instances/dateUsed.dart';
+import 'package:my_flutter_application/instances/date_used.dart';
 import 'package:my_flutter_application/logic/date_controller.dart';
 
 class SubGroup extends StatefulWidget {
@@ -20,7 +18,10 @@ class _SubGroupState extends State<SubGroup> {
 
 
 
-  final List<String> items = List.generate(1000, (index) => 'Item ${index + 1}');
+  final List<String> items = List.generate(
+    1000, 
+    (index) => 'Item ${index + 1}',
+  );
   final ScrollController _scrollController = ScrollController();
   int _currentIndex = 0;
 
@@ -31,7 +32,8 @@ class _SubGroupState extends State<SubGroup> {
       month: DateTime.now().month, 
       monthName: DateController.getMonthByPosition(DateTime.now().month), 
       dayOfWeek: DateTime.now().weekday, 
-      dayOfWeekName: DateController.getWeekdayByPosition(DateTime.now().weekday), 
+      dayOfWeekName: DateController.
+                      getWeekdayByPosition(DateTime.now().weekday), 
       year: DateTime.now().year,
     ),
   ];
@@ -48,7 +50,7 @@ class _SubGroupState extends State<SubGroup> {
       i++;
       _scrollController.animateTo(
         200 * i,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
       
@@ -59,7 +61,7 @@ class _SubGroupState extends State<SubGroup> {
       _currentIndex--;
       _scrollController.animateTo(
         200 * (i-1),
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
       i--;
@@ -68,7 +70,7 @@ class _SubGroupState extends State<SubGroup> {
   void _scrollToCurrentItem() {
       _scrollController.animateTo(
         0,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
       i = 0;
@@ -80,13 +82,13 @@ class _SubGroupState extends State<SubGroup> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
 
-    return Container(
+    return SizedBox(
       width: mediaQuery.size.width,
       // color: Colors.amber,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
+          SizedBox(
             height: mediaQuery.size.height * 0.04,
             child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -99,7 +101,7 @@ class _SubGroupState extends State<SubGroup> {
             ),
           ),
 
-          Container(
+          SizedBox(
             height: mediaQuery.size.height * 0.035,
             width: mediaQuery.size.width * 0.55,
             // color: Colors.black,
@@ -142,7 +144,7 @@ class _SubGroupState extends State<SubGroup> {
           ,
 
 
-        Container(
+        SizedBox(
           height: mediaQuery.size.height * 0.03,
           width: mediaQuery.size.width * 0.45,
           // color: Colors.amber,

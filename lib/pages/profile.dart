@@ -2,26 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_application/elements/footer.dart';
 import 'package:my_flutter_application/elements/info_dialog.dart';
 import 'package:my_flutter_application/elements/my_add_button.dart';
-// import 'package:my_flutter_application/elements/my_add_button.dart';
 import 'package:my_flutter_application/elements/my_app_bar.dart';
 import 'package:my_flutter_application/elements/my_input_form.dart';
 import 'package:my_flutter_application/elements/settings_item.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
-// import 'package:my_flutter_application/logic/storage.dart';
 import 'package:my_flutter_application/main.dart';
-// import 'package:my_flutter_application/main.dart';
 
 
 class ProfilePage extends StatefulWidget {
   final dynamic user;
 
-  ProfilePage({this.user, super.key});
+  const ProfilePage({this.user, super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  String dropdownvalue = 'Apple';
+  var items = [
+    'Apple',
+    'Banana',
+    'Grapes',
+    'Orange',
+    'watermelon',
+    'Pineapple',
+  ];
 
   void changeAppMode(){
     MyApp.rootKey.currentState?.rebuildApp();
@@ -36,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: MyAppBar(
-        title: 'Профіль', 
+        title: '@username', 
         preferredHeight: mediaQuery.size.height * 0.07,
       ),
       body: Container(
@@ -49,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Column(
                 children: [
-                  Container(
+                  SizedBox(
                     width: mediaQuery.size.width * 0.29,
                     child: Image.asset('assets/user.png'),
                   ),
@@ -73,13 +79,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     SettingsItem(
                       onPressed: () {
-                        showDialog(
+                        showDialog<void>(
                           context: context,
                           builder: (_) => InfoDialog(
                             title: 'Edit Profile',
                             titleWidgets:[
                               Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment: 
+                                  MainAxisAlignment.spaceAround,
                                 children: [
                                   MyInputForm(
                                     height: formHeight, 
@@ -93,26 +100,65 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),  
                                 ],
                               ),
-                  ],
-                  saveButton: MyAddButton(
-                                    onPressed: () => {
-                                      showDialog(
+                            ],
+                            bottomWidgets: [
+                              Container(
+                                height: 35,
+                              ),
+                              Center(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    showDialog<void>(
                                         context: context,
                                         builder: (_) => InfoDialog(
-                                          title: 'change password',
+                                          title: 'Change password',
                                           titleWidgets: [
                                             MyInputForm(
                                               height: formHeight, 
                                               width: formWidth,
-                                              labelText: 'enter password',
-                                            )
+                                              labelText: 
+                                                'enter current password',
+                                            ),
+                                            MyInputForm(
+                                              height: formHeight, 
+                                              width: formWidth,
+                                              labelText: 'enter new password',
+                                            ),
+                                            MyInputForm(
+                                              height: formHeight, 
+                                              width: formWidth,
+                                              labelText: 
+                                                'enter new password again',
+                                            ),
                                           ],
-                                          saveButton: Container(),
+                                          saveButton: MyAddButton(
+                                            onPressed: () => {
+                                              // save password
+                                            },
+                                            buttonText: 'Save',
+                                          ),
                                           closeButtonText: 'Close',
+                                          type: 1,
                                         ),
-                                      ),
+                                      );
+                                  },
+                                  child: Text(
+                                    'Change password',
+                                    style: TextStyle(
+                                      fontSize: 
+                                        MyFontSize.getFontSize(context, 1),
+                                      decoration: TextDecoration. underline,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                            saveButton: MyAddButton(
+                                    onPressed: () => {
+                                      // save user info
                                     },
-                                    buttonText: 'Change password',
+                                    buttonText: 'Save',
                                   ),
                             closeButtonText: 'Close',
                             type: 1,
@@ -123,8 +169,67 @@ class _ProfilePageState extends State<ProfilePage> {
                       text: 'Edit profile info',
                     ),
                     SettingsItem(
-                      onPressed: () => {},
-                      icon: const Icon(Icons.refresh),
+                      onPressed: () {
+                        showDialog<void>(
+                          context: context,
+                          builder: (_) => InfoDialog(
+                            title: 'Change group',
+                            titleWidgets:[
+                              Column(
+                                mainAxisAlignment: 
+                                  MainAxisAlignment.spaceAround,
+                                children: [
+                                  DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        hint: Text(
+                          'Select Item',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).hintColor,
+                          ),
+                        ),
+                        items: items
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),)
+                            .toList(),
+                        value: dropdownvalue,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownvalue = newValue!;
+                          });
+                        },
+                        // buttonHeight: 40,
+                        // buttonWidth: 140,
+                        // itemHeight: 40,
+                      ),
+                    ),
+                                  MyInputForm(
+                                    height: formHeight, 
+                                    width: formWidth,
+                                    labelText: 'select group',
+                                  ),  
+                                ],
+                              ),
+                            ],
+                            saveButton: MyAddButton(
+                                    onPressed: () => {
+                                      // save user info
+                                    },
+                                    buttonText: 'Save',
+                                  ),
+                            closeButtonText: 'Close',
+                            type: 1,
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.group),
                       text: 'Group settings',
                     ),
                     SettingsItem(
@@ -135,8 +240,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     SettingsItem(
                       onPressed: changeAppMode,
                       icon: MyApp.rootKey.currentState!.darkMode ? 
-                        Icon(Icons.dark_mode) : 
-                        Icon(Icons.light_mode),
+                        const Icon(Icons.dark_mode) : 
+                        const Icon(Icons.light_mode),
                       text: 'Change app mode',
                     ),
                     Row(
@@ -145,11 +250,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         SettingsItem(
                           itemWidthSubtraction: 0.46,
                       onPressed: () => {
-                        showDialog(
+                        showDialog<void>(
                           context: context,
                           builder: (_) => InfoDialog(
                             title: 'About this app',
-                            titleWidgets: [Text('sdgdflkgjdfkg')],
+                            titleWidgets: const [Text('sdgdflkgjdfkg')],
                             saveButton: Container(),
                             closeButtonText: 'Close',
                           ),
@@ -169,8 +274,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     
                   ],
                 ),
-              )
-        
+              ),
           ],
         ),
       ),  

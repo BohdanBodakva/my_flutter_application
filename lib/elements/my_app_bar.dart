@@ -5,7 +5,11 @@ class MyAppBar extends StatefulWidget implements PreferredSizeWidget{
   final double preferredHeight;
   final String title;
 
-  const MyAppBar({required this.title, required this.preferredHeight, super.key});
+  const MyAppBar({
+    required this.title, 
+    required this.preferredHeight, 
+    super.key,
+  });
 
   @override
   State<MyAppBar> createState() => _MyAppBarState();

@@ -17,15 +17,20 @@ class _MyCalendarState extends State<MyCalendar> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
 
+    
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: MyAppBar(title: 'Календар', preferredHeight: mediaQuery.size.height * 0.07,),
+      appBar: MyAppBar(
+        title: 'Календар', 
+        preferredHeight: mediaQuery.size.height * 0.07,
+      ),
       body: Material(
         child: CalendarDatePicker(
           initialDate: DateTime.now(), 
           firstDate: DateTime.parse('20200101'), 
           lastDate: DateTime.parse('20250101'),
-          onDateChanged: (DateTime d) => {}
+          onDateChanged: (DateTime d) => {},
         ),
       ),
       bottomNavigationBar: const Footer(),

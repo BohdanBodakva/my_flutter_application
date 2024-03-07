@@ -1,5 +1,3 @@
-// import 'package:flutter/material.dart';
-
 import 'package:flutter/material.dart';
 
 class MyFontSize{
@@ -14,9 +12,7 @@ class MyFontSize{
       case 4: return width * 0.065;
       case 5: return width * 0.075;
       case 6: return width * 0.085;
+      default: return -1;
     }
-    
-    return -1;
   }
-  
 }
