@@ -15,12 +15,12 @@ class MyAlertDialog extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.sizeOf(context);
 
     return SizedBox(
       child: AlertDialog(
       content: SizedBox(
-        height: mediaQuery.size.height * 0.18,
+        height: mediaQuery.height * 0.18,
         child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -40,7 +40,7 @@ class MyAlertDialog extends StatelessWidget{
           ],
       ),
       ),  
-      actions: <Widget>[
+      actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();

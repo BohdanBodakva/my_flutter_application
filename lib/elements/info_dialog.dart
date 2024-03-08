@@ -49,23 +49,23 @@ class _InfoDialogState extends State<InfoDialog> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.sizeOf(context);
 
     final widgetList = [...widget.titleWidgets, ...widget.bottomWidgets];
 
     double dialogHeight = 0;
 
     if (widget.type == 0) {
-      dialogHeight = mediaQuery.size.height * 0.22;
+      dialogHeight = mediaQuery.height * 0.22;
     }
     else if (widget.type == 1) {
-      dialogHeight = mediaQuery.size.height * 0.37;
+      dialogHeight = mediaQuery.height * 0.37;
     }
     
     return SizedBox(
       child: AlertDialog(
       content: SizedBox(
-        height: mediaQuery.size.height * 0.55,
+        height: mediaQuery.height * 0.55,
         child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -79,7 +79,7 @@ class _InfoDialogState extends State<InfoDialog> with WidgetsBindingObserver {
               height: isKeyboardVisible ? dialogHeight * 0.5 : dialogHeight,
               child: SingleChildScrollView(
                 child: SizedBox(
-                  width: mediaQuery.size.width,
+                  width: mediaQuery.width,
                   child: Column(
                     children: widgetList,
                   ),
@@ -90,7 +90,7 @@ class _InfoDialogState extends State<InfoDialog> with WidgetsBindingObserver {
           ],
       ),
       ),  
-      actions: <Widget>[
+      actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();

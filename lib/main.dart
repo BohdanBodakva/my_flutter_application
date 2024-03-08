@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_application/elements/my_calendar.dart';
 import 'package:my_flutter_application/pages/home.dart';
-// import 'package:my_flutter_application/logic/storage.dart';
 import 'package:my_flutter_application/pages/profile.dart';
 
 void main() {
@@ -46,7 +45,6 @@ class MyAppState extends State<_MyApp> {
       routes: {
         '/': (context) => const HomePage(),
         '/profile': (context) => const ProfilePage(),
-        // '/auth', (context) => {},
         '/calendar': (context) => const MyCalendar(),
       },
       theme: ThemeData(

@@ -24,10 +24,10 @@ class _MyLessonBoxState extends State<MyLessonBox> {
 
   @override
   Widget build(BuildContext context){
-    final mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.sizeOf(context);
 
     return Container(
-      height: mediaQuery.size.height * 0.27,
+      height: mediaQuery.height * 0.27,
       decoration: BoxDecoration(
           border: Border.all(
             color: const Color.fromARGB(255, 20, 111, 185),
@@ -40,7 +40,7 @@ class _MyLessonBoxState extends State<MyLessonBox> {
           Padding(
             padding: const EdgeInsets.only(top: 14),
             child: SizedBox(
-              width: mediaQuery.size.width * 0.15,
+              width: mediaQuery.width * 0.15,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -60,8 +60,6 @@ class _MyLessonBoxState extends State<MyLessonBox> {
                   ),
                     ],
                   ),
-                  
-                  // Container(height: 18,),
                   Column(
                     children: [
                       Text(
@@ -101,7 +99,7 @@ class _MyLessonBoxState extends State<MyLessonBox> {
           Padding(
             padding: const EdgeInsets.only(top: 14, bottom: 14),
             child: SizedBox(
-              width: mediaQuery.size.width * 0.7,
+              width: mediaQuery.width * 0.7,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [

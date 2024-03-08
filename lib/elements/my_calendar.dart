@@ -15,7 +15,7 @@ class _MyCalendarState extends State<MyCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.sizeOf(context);
 
     
 
@@ -23,7 +23,7 @@ class _MyCalendarState extends State<MyCalendar> {
       resizeToAvoidBottomInset: true,
       appBar: MyAppBar(
         title: 'Календар', 
-        preferredHeight: mediaQuery.size.height * 0.07,
+        preferredHeight: mediaQuery.height * 0.07,
       ),
       body: Material(
         child: CalendarDatePicker(

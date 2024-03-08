@@ -13,11 +13,10 @@ class _FooterState extends State<Footer> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.sizeOf(context);
 
     return SizedBox(
-      // width: _mediaQuery.size.width,
-      height: mediaQuery.size.height * 0.075,
+      height: mediaQuery.height * 0.075,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

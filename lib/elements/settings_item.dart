@@ -17,10 +17,10 @@ class SettingsItem extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    final mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.sizeOf(context);
 
     return SizedBox(
-      width: mediaQuery.size.width * 0.85 * itemWidthSubtraction,
+      width: mediaQuery.width * 0.85 * itemWidthSubtraction,
       child: TextButton(
       onPressed: onPressed,
       child: Container(

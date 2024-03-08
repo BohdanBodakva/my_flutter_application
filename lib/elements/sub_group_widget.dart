@@ -13,10 +13,6 @@ class SubGroup extends StatefulWidget {
 
 class _SubGroupState extends State<SubGroup> {
   var currentDate = DateTime.now();
-  // var usedDate = currentDate;
-
-
-
 
   final List<String> items = List.generate(
     1000, 
@@ -39,12 +35,6 @@ class _SubGroupState extends State<SubGroup> {
   ];
 
   void _scrollToNextItem() {
-    // var nextDate = DateController.generateNextDateAndFormatIt(
-    //   , 
-    //   month, 
-    //   day
-    // );
-
     if (_currentIndex < items.length - 1) {
       _currentIndex++;
       i++;
@@ -80,21 +70,20 @@ class _SubGroupState extends State<SubGroup> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.sizeOf(context);
 
     return SizedBox(
-      width: mediaQuery.size.width,
-      // color: Colors.amber,
+      width: mediaQuery.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(
-            height: mediaQuery.size.height * 0.04,
+            height: mediaQuery.height * 0.04,
             child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            width: mediaQuery.size.width * 0.12,
+            width: mediaQuery.width * 0.12,
             child: TextButton(
               onPressed: _scrollToPreviousItem,
               child: const Icon(Icons.arrow_back, size: 22,),
@@ -102,9 +91,8 @@ class _SubGroupState extends State<SubGroup> {
           ),
 
           SizedBox(
-            height: mediaQuery.size.height * 0.035,
-            width: mediaQuery.size.width * 0.55,
-            // color: Colors.black,
+            height: mediaQuery.height * 0.035,
+            width: mediaQuery.width * 0.55,
             child: Center(
               child: Text(
                   '${DateController.getWeekdayByPosition(
@@ -126,18 +114,12 @@ class _SubGroupState extends State<SubGroup> {
           ),
 
           SizedBox(
-            width: mediaQuery.size.width * 0.12,
+            width: mediaQuery.width * 0.12,
             child: TextButton(
               onPressed: _scrollToNextItem,
               child: const Icon(Icons.arrow_forward, size: 22,),
             ), 
           ),
-          // SizedBox(
-          //   child: TextButton(
-          //     onPressed: _scrollToCurrentItem,
-          //     child: Container(),
-          //   ), 
-          // ),
         ],
       ),
           )
@@ -145,8 +127,8 @@ class _SubGroupState extends State<SubGroup> {
 
 
         SizedBox(
-          height: mediaQuery.size.height * 0.03,
-          width: mediaQuery.size.width * 0.45,
+          height: mediaQuery.height * 0.03,
+          width: mediaQuery.width * 0.45,
           // color: Colors.amber,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -159,7 +141,7 @@ class _SubGroupState extends State<SubGroup> {
               ),
               
               Container(
-                height: mediaQuery.size.height * 0.025,
+                height: mediaQuery.height * 0.025,
                 width: 2,
                 color: const Color.fromARGB(255, 20, 111, 185),
               ),

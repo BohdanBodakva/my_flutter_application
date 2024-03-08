@@ -28,28 +28,28 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.sizeOf(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: MyAppBar(
         title: 'Розклад НУ "ЛП"', 
-        preferredHeight: mediaQuery.size.height * 0.07,
+        preferredHeight: mediaQuery.height * 0.07,
       ),
       body: Container(
         padding: EdgeInsets.only(
-          left: mediaQuery.size.width * 0.05,
-          right: mediaQuery.size.width * 0.05,
+          left: mediaQuery.width * 0.05,
+          right: mediaQuery.width * 0.05,
         ),
         child: Center(
           child: Column(
             children: [
               SizedBox(
-                height: mediaQuery.size.height * 0.088,
+                height: mediaQuery.height * 0.088,
                 child: const SubGroup(),
               ),
               SizedBox(
-                height: mediaQuery.size.height * 0.7,
+                height: mediaQuery.height * 0.7,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                             homework: null,
                           ),
                           Container(
-                            height: mediaQuery.size.width * 0.05,
+                            height: mediaQuery.width * 0.05,
                           ),
                         ],
                       ),

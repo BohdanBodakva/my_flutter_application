@@ -35,20 +35,20 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.sizeOf(context);
 
-    final formHeight = mediaQuery.size.height * 0.15;
-    final formWidth = mediaQuery.size.width * 0.6;
+    final formHeight = mediaQuery.height * 0.15;
+    final formWidth = mediaQuery.width * 0.6;
 
     return Scaffold(
       appBar: MyAppBar(
         title: '@username', 
-        preferredHeight: mediaQuery.size.height * 0.07,
+        preferredHeight: mediaQuery.height * 0.07,
       ),
       body: Container(
         padding: EdgeInsets.symmetric(
-          vertical: mediaQuery.size.height * 0.02,
-          horizontal: mediaQuery.size.height * 0.05,
+          vertical: mediaQuery.height * 0.02,
+          horizontal: mediaQuery.height * 0.05,
         ),
         child: Center(
           child: Column(
@@ -56,11 +56,11 @@ class _ProfilePageState extends State<ProfilePage> {
               Column(
                 children: [
                   SizedBox(
-                    width: mediaQuery.size.width * 0.29,
+                    width: mediaQuery.width * 0.29,
                     child: Image.asset('assets/user.png'),
                   ),
                   Container(
-                    height: mediaQuery.size.width * 0.08,
+                    height: mediaQuery.width * 0.08,
                   ),
                   Text(
                       'User',
@@ -71,10 +71,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
               Container(
-                height: mediaQuery.size.height * 0.03,
+                height: mediaQuery.height * 0.03,
               ),
               SizedBox(
-                height: mediaQuery.size.height * 0.47,
+                height: mediaQuery.height * 0.47,
                 child: Column(
                   children: [
                     SettingsItem(
@@ -205,9 +205,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             dropdownvalue = newValue!;
                           });
                         },
-                        // buttonHeight: 40,
-                        // buttonWidth: 140,
-                        // itemHeight: 40,
                       ),
                     ),
                                   MyInputForm(

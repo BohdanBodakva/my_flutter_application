@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MyFontSize{
 
   static double getFontSize(BuildContext context, int i){
-    final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.sizeOf(context).width;
 
     switch(i){
       case 1: return width * 0.035;
