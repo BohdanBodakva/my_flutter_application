@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
+import 'package:my_flutter_application/enums/my_colors.dart';
 import 'package:my_flutter_application/instances/date_used.dart';
 import 'package:my_flutter_application/logic/date_controller.dart';
 
@@ -143,7 +144,7 @@ class _SubGroupState extends State<SubGroup> {
               Container(
                 height: mediaQuery.height * 0.025,
                 width: 2,
-                color: const Color.fromARGB(255, 20, 111, 185),
+                color: MyColors.myBlueColor,
               ),
               Text(
                 ' 1 група',

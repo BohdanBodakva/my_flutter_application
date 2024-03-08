@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
+import 'package:my_flutter_application/enums/my_colors.dart';
 
 class SettingsItem extends StatelessWidget{
   final String text;
@@ -27,7 +28,7 @@ class SettingsItem extends StatelessWidget{
         padding: const EdgeInsets.all(18),        
         decoration: BoxDecoration(
             border: Border.all(
-              color: const Color.fromARGB(255, 20, 111, 185),
+              color: MyColors.myBlueColor,
               width: 2,
             ),
             borderRadius: BorderRadius.circular(20),

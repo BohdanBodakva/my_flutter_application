@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:my_flutter_application/elements/my_add_button.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
+import 'package:my_flutter_application/enums/my_colors.dart';
 import 'package:my_flutter_application/instances/lecture.dart';
 
 
@@ -30,7 +31,7 @@ class _MyLessonBoxState extends State<MyLessonBox> {
       height: mediaQuery.height * 0.27,
       decoration: BoxDecoration(
           border: Border.all(
-            color: const Color.fromARGB(255, 20, 111, 185),
+            color: MyColors.myBlueColor,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(20),
@@ -93,11 +94,11 @@ class _MyLessonBoxState extends State<MyLessonBox> {
             padding: const EdgeInsets.only(top: 14, bottom: 14, right: 10),
             child: Container(
               width: 1.5,
-              color: const Color.fromARGB(255, 20, 111, 185),
+              color: MyColors.myBlueColor,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 14, bottom: 14),
+            padding: const EdgeInsets.symmetric(vertical: 14),
             child: SizedBox(
               width: mediaQuery.width * 0.7,
               child: Column(
