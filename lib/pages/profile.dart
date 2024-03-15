@@ -6,6 +6,7 @@ import 'package:my_flutter_application/elements/my_app_bar.dart';
 import 'package:my_flutter_application/elements/my_input_form.dart';
 import 'package:my_flutter_application/elements/settings_item.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
+import 'package:my_flutter_application/logic/user_controller.dart';
 import 'package:my_flutter_application/main.dart';
 
 
@@ -33,6 +34,11 @@ class _ProfilePageState extends State<ProfilePage> {
     MyApp.rootKey.currentState?.rebuildApp();
   }
 
+  void logOut(){
+    UserController.unsetUser();
+    Navigator.pushNamed(context, '/login');
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.sizeOf(context);
@@ -42,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: MyAppBar(
-        title: '@username', 
+        title: UserController.getCurrentUsername()!, 
         preferredHeight: mediaQuery.height * 0.07,
       ),
       body: Container(
@@ -63,7 +69,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     height: mediaQuery.width * 0.08,
                   ),
                   Text(
-                      'User',
+                      '${UserController.getUserByUsername(
+                        UserController.getCurrentUsername()!,
+                      )!.name} ${UserController.getUserByUsername(
+                        UserController.getCurrentUsername()!,
+                      )!.surname}',
                       style: TextStyle(
                         fontSize: MyFontSize.getFontSize(context, 5),
                       ),
@@ -262,7 +272,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     SettingsItem(
                       itemWidthSubtraction: 0.46,
-                      onPressed: () => {},
+                      onPressed: logOut,
                       icon: const Icon(Icons.settings),
                       text: 'Log Out',
                     ),

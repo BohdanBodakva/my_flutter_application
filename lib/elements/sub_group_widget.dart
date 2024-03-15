@@ -93,7 +93,7 @@ class _SubGroupState extends State<SubGroup> {
 
           SizedBox(
             height: mediaQuery.height * 0.035,
-            width: mediaQuery.width * 0.55,
+            width: mediaQuery.width * 0.65,
             child: Center(
               child: Text(
                   '${DateController.getWeekdayByPosition(
