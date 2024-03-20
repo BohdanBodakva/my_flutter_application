@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:my_flutter_application/elements/footer.dart';
 import 'package:my_flutter_application/elements/info_dialog.dart';
@@ -6,11 +8,26 @@ import 'package:my_flutter_application/elements/my_app_bar.dart';
 import 'package:my_flutter_application/elements/my_input_form.dart';
 import 'package:my_flutter_application/elements/settings_item.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
+import 'package:my_flutter_application/logic/user_controller.dart';
 import 'package:my_flutter_application/main.dart';
 
 
 class ProfilePage extends StatefulWidget {
   final dynamic user;
+
+  Future<(String, String)> getUserNameAndSurname() async {
+    
+    var user = await UserController
+              .getUserByUsername(UserController.getCurrentUsername()!);
+
+    print('uuuuuuuuuuuuuuuuuuuuser: $user');
+
+    if (user == null){
+      return ('', '');
+    }
+
+    return (user.name, user.surname);
+  }
 
   const ProfilePage({this.user, super.key});
 
@@ -29,9 +46,33 @@ class _ProfilePageState extends State<ProfilePage> {
     'Pineapple',
   ];
 
+  var userName = '';
+  var userSurname = '';
+
+  // @override
+  // void initState() async {
+  //   super.initState();
+  //   // var login = await UserController.getUserByUsername();
+
+  //   // if(login == null){
+  //   //   userName = '';
+  //   //   userSurname = '';
+  //   // } else {
+  //     // userName = login.$1;
+  //     // userSurname = login.$2;
+  //   // }
+  // }
+
   void changeAppMode(){
     MyApp.rootKey.currentState?.rebuildApp();
   }
+
+  void logOut(){
+    UserController.unsetUser();
+    Navigator.pushNamed(context, '/login');
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: MyAppBar(
-        title: '@username', 
+        title: UserController.getCurrentUsername()!, 
         preferredHeight: mediaQuery.height * 0.07,
       ),
       body: Container(
@@ -62,12 +103,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   Container(
                     height: mediaQuery.width * 0.08,
                   ),
-                  Text(
-                      'User',
-                      style: TextStyle(
-                        fontSize: MyFontSize.getFontSize(context, 5),
-                      ),
-                    ),
+                  // Text(
+                  //     '${await getUserNameAndSurname().$1} '
+                  //     '${getUserNameAndSurname().$2}',
+                  //     style: TextStyle(
+                  //       fontSize: MyFontSize.getFontSize(context, 5),
+                  //     ),
+                  //   ),
                 ],
               ),
               Container(
@@ -262,7 +304,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     SettingsItem(
                       itemWidthSubtraction: 0.46,
-                      onPressed: () => {},
+                      onPressed: logOut,
                       icon: const Icon(Icons.settings),
                       text: 'Log Out',
                     ),

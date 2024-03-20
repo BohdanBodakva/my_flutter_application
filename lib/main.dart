@@ -1,9 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:my_flutter_application/elements/my_calendar.dart';
+import 'package:my_flutter_application/logic/user_controller.dart';
 import 'package:my_flutter_application/pages/home.dart';
+import 'package:my_flutter_application/pages/login.dart';
 import 'package:my_flutter_application/pages/profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final admin = UserController.getAdmin();
+  prefs!.setString('admin', json.encode(admin.toJson()));
   runApp(const MyApp());
 }
 
@@ -41,9 +50,10 @@ class MyAppState extends State<_MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
         '/': (context) => const HomePage(),
+        '/login': (context) => LoginPage(),
         '/profile': (context) => const ProfilePage(),
         '/calendar': (context) => const MyCalendar(),
       },
