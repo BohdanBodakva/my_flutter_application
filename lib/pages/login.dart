@@ -30,9 +30,28 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final regExp = RegExp(r'[a-zA-Z]');
 
+  // SharedPreferences prefs = 
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _initializeStoredValue();
+  // }
+
+  // Future<void> _initializeStoredValue() async {
+  //   prefs = await SharedPreferences.getInstance();
+  //   final admin = UserController.getAdmin();
+  //   await prefs!.setString('admin', jsonEncode(admin));
+  // }
+
   @override
   Widget build(BuildContext context) {
+
+    
+
     final mediaQuery = MediaQuery.sizeOf(context);
+
+    final textFieldRegex = RegExp(r'^[a-zA-Z0-9_]+$');
 
     final usernameController = TextEditingController();
     final passwordController = TextEditingController();
@@ -47,66 +66,72 @@ class _LoginPageState extends State<LoginPage> {
     var enteredGroup = '';
 
     bool validateInputFields(){
-      if (RegExp(r'[a-zA-Z]').hasMatch(enteredUsername) ){
-        debugPrint('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+      if (!textFieldRegex.hasMatch(enteredUsername)){
         setState(() {
-          widget.usernameValidatorMessage = 'enter valid value';
+          widget.usernameValidatorMessage = 
+            'use only letters, digits or underscores';
         });
         return false;
       }
-      debugPrint('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
-      // if (widget.isRegistering){
-      //   if (enteredName == '' || !enteredName.contains(regExp)){
-      //     setState(() {
-      //       widget.nameValidatorMessage = 'enter valid value';
-      //     });
-      //     return false;
-      //   }
-      //   if (enteredSurname == '' || !enteredSurname.contains(regExp)){
-      //     setState(() {
-      //       widget.surnameValidatorMessage = 'enter valid value';
-      //     });
-      //     return false;
-      //   }
-      //   if (enteredGroup == '' || !enteredGroup.contains(regExp)){
-      //     setState(() {
-      //       widget.groupValidatorMessage = 'enter valid value';
-      //     });
-      //     return false;
-      //   }
-      // }
+      if (widget.isRegistering){
+        if (!textFieldRegex.hasMatch(enteredUsername)){
+          setState(() {
+            widget.usernameValidatorMessage = 
+              'use only letters, digits or underscores';
+          });
+          return false;
+        }
+        if (!textFieldRegex.hasMatch(enteredUsername)){
+          setState(() {
+            widget.usernameValidatorMessage = 
+              'use only letters, digits or underscores';
+          });
+          return false;
+        }
+        if (!textFieldRegex.hasMatch(enteredUsername)){
+          setState(() {
+            widget.usernameValidatorMessage = 
+              'use only letters, digits or underscores';
+          });
+          return false;
+        }
+      }
 
       return true;
     }
 
-    void login(){
+    void login()async {
         enteredUsername = usernameController.text as String;
         enteredPassword = passwordController.text as String;
+        widget.infoMessage = '';
+        widget.clearAllValidationMessages();
+
       if (validateInputFields()){
-        var login = UserController.checkLogin(enteredUsername, enteredPassword);
+        var login = await UserController.checkLogin(enteredUsername, enteredPassword);
         final loginStatus = login.$1;
-        final info = login.$2;        
-        if(loginStatus){
-          widget.infoMessage = '';
-          widget.clearAllValidationMessages();
+        final info = login.$2;   
+        debugPrint('login status: $loginStatus');   
+        if(loginStatus.toString() == 'true'){
           Navigator.pushNamed(context, '/');
         } else {
           setState(() {
-            widget.infoMessage = info;
+            widget.infoMessage = info.toString();
           });
         }
       }
     }
 
-    void register(){
+    void register() async{
         enteredUsername = usernameController.text as String;
         enteredPassword = passwordController.text as String;
         enteredName = nameController.text as String;
         enteredSurname = surnameController.text as String;
         enteredGroup = groupController.text as String;
+        widget.infoMessage = '';
+        widget.clearAllValidationMessages();
       if(validateInputFields()){
-        var registerStatus = UserController.addNewUser(
+        var registerStatus = await UserController.addNewUser(
           User(
             username: enteredUsername,
             password: enteredPassword,
@@ -115,13 +140,12 @@ class _LoginPageState extends State<LoginPage> {
             group: enteredGroup,
           ),
         );
+        UserController.setUsernameAsActive(enteredUsername);
         if(registerStatus == 'User was successfully added'){
-          widget.infoMessage = '';
-          widget.clearAllValidationMessages();
           Navigator.pushNamed(context, '/');
         } else {
           setState(() {
-            widget.infoMessage = registerStatus;
+            widget.infoMessage = registerStatus.toString();
           });
         }
       }
@@ -153,7 +177,6 @@ class _LoginPageState extends State<LoginPage> {
                       border: UnderlineInputBorder(),
                       labelText: 'username',
                     ),
-                    
                     controller: usernameController,
                   ),
                   Text(

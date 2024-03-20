@@ -1,14 +1,19 @@
+import 'dart:convert';
+
 import 'package:my_flutter_application/instances/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class UserController{
-
-  static List<User> __users = [
+abstract class UserController{
+  static final __admin = 
     User(
       username: 'admin',
       password: 'admin',
-      name: 'Admin'
-    )
-  ];
+      name: 'Admin',
+    );
+
+  static User getAdmin(){
+    return __admin;
+  } 
 
   static String? __currentUsername;
 
@@ -16,9 +21,9 @@ class UserController{
     return __currentUsername;
   }
 
-  static List<User> getAllUsers(){
-    return __users;
-  }
+  // static List<User> getAllUsers(){
+  //   return __users;
+  // }
 
   static void setUsernameAsActive(String username){
     __currentUsername = username;
@@ -28,36 +33,54 @@ class UserController{
     __currentUsername = null;
   }
 
-  static User? getUserByUsername(String username){
-    for (var user in __users){
-      if(user.username == username){
-        return user;
-      }
+  static Future<User?> getUserByUsername(String username) async{
+    var prefs = await SharedPreferences.getInstance();
+    var user = User.fromJson(jsonDecode((prefs.getString(username))!));
+
+    if (user == null){
+      return null;
     }
-    return null;
+
+    return user;
   }
 
-  static bool __checkIfUsernameIsUnique(String username){
-    for (var user in __users){
-      if(user.username == username){
-        return false;
-      }
-    }
-    return true;
-  }
+  // static bool __checkIfUsernameIsUnique(String username) async{
+  //   var prefs = await SharedPreferences.getInstance();
+  //   User user = User.fromJson(jsonDecode((prefs.getString(username))!));
 
-  static String addNewUser(User user){
-    if (!__checkIfUsernameIsUnique(user.username)){
-      return 'User with username "${user.username}" already exists';
-    }
-    __currentUsername = user.username;
-    __users.add(user);
+  //   for (var user in __users){
+  //     if(user.username == username){
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
+
+  static Future<String> addNewUser(User user) async{
+    var prefs = await SharedPreferences.getInstance();
+
+    prefs.setString(user.username, json.encode(user.toJson()));
+
+    // if (!__checkIfUsernameIsUnique(user.username)){
+    //   return 'User with username "${user.username}" already exists';
+    // }
+    // __currentUsername = user.username;
+    // // __users.add(user);
     return 'User was successfully added';
   }
 
-  static (bool, String) checkLogin(String username, String password){
-    var user = getUserByUsername(username);
-    if (user == null){
+  static Future<(bool, String)> checkLogin(String username, String password) async{
+    var prefs = await SharedPreferences.getInstance();
+
+    var data = prefs.getString(username);
+
+    if (data == null){
+      return (false, 'User with username "${username}" does not exist');
+    }
+
+    var user = User.fromJson(jsonDecode(data!));
+
+    if (user == null || user.username == ''){
       return (false, 'User with username "${username}" does not exist');
     }
     if (user.password == password){
@@ -66,5 +89,4 @@ class UserController{
     }
     return (false, 'Password is wrong');
   }
-
 }

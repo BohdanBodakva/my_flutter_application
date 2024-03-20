@@ -8,7 +8,6 @@ class User{
   String group;
   String name;
   String surname;
-  
 
   User({
     required this.username,
@@ -18,17 +17,21 @@ class User{
     this.surname = '',
   });
 
-  factory User.fromJson(Map<String, String> parsedJson) {
+  static User? fromJson(dynamic parsedJson) {
+    if (parsedJson == null || parsedJson == ''){
+      return null;
+    }
+
     return User(
-      username: parsedJson['username'] ?? "",
-      password: parsedJson['password'] ?? ""
+      username: parsedJson['username'] as String ?? '',
+      password: parsedJson['password'] as String ?? '',
     );
   }
-        
+
   Map<String, dynamic> toJson() {
     return {
-      "username": this.username,
-      "password": this.password
+      'username': username,
+      'password': password,
     };
   }
   
