@@ -8,6 +8,7 @@ class Lecture{
   final TimeOfDay startTime;
   final TimeOfDay endTime;
   final int lectionNumber;
+  final String lectionType;
 
   Lecture({
     required this.lectureName,
@@ -17,5 +18,6 @@ class Lecture{
     required this.startTime, 
     required this.endTime,
     required this.lectionNumber,
+    required this.lectionType,
   });
 }

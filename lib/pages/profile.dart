@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:my_flutter_application/elements/footer.dart';
 import 'package:my_flutter_application/elements/info_dialog.dart';
 import 'package:my_flutter_application/elements/my_add_button.dart';
@@ -8,12 +9,16 @@ import 'package:my_flutter_application/elements/my_app_bar.dart';
 import 'package:my_flutter_application/elements/my_input_form.dart';
 import 'package:my_flutter_application/elements/settings_item.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
+import 'package:my_flutter_application/instances/user.dart';
+import 'package:my_flutter_application/localstore/MyController.dart';
 import 'package:my_flutter_application/logic/user_controller.dart';
 import 'package:my_flutter_application/main.dart';
 
 
 class ProfilePage extends StatefulWidget {
   final dynamic user;
+  static dynamic usrname;
+  static dynamic fullName;
 
   Future<(String, String)> getUserNameAndSurname() async {
     
@@ -29,7 +34,7 @@ class ProfilePage extends StatefulWidget {
     return (user.name, user.surname);
   }
 
-  const ProfilePage({this.user, super.key});
+  ProfilePage({this.user, super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -45,6 +50,12 @@ class _ProfilePageState extends State<ProfilePage> {
     'watermelon',
     'Pineapple',
   ];
+
+  @override
+  void initState(){
+    super.initState();
+    getCurrentUsername();
+  }
 
   var userName = '';
   var userSurname = '';
@@ -68,8 +79,83 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void logOut(){
-    UserController.unsetUser();
+    MyController.deleteActiveUser();
     Navigator.pushNamed(context, '/login');
+  }
+
+  Future<void> getCurrentUsername() async {
+    String r = await MyController.getCurrentUsername() as String;
+    debugPrint("CURRENT USERNAME 2: $r");
+
+    dynamic user = await MyController.getUserByUsername(r); 
+
+    debugPrint("USEEEEEEr: ${user}");
+
+    
+
+    setState(() {
+      ProfilePage.usrname = r;
+      ProfilePage.fullName = '${user['name']} ${user['surname']}';
+    });
+  }
+
+  final nameController = TextEditingController();
+  final surnameController = TextEditingController();
+
+  saveUserInfo()async{
+    var enteredName = nameController.text as String;
+    var enteredSurname = surnameController.text as String;
+
+    var currUsername = (await MyController.getCurrentUsername()).toString();
+
+    var user = await MyController.getUserByUsername(
+      currUsername,
+    );
+
+    debugPrint('THIS USER: $user');
+
+    user['name'] = enteredName;
+    user['surname'] = enteredSurname;
+
+    debugPrint('THIS USER 2: $user');
+
+
+
+    // final db = Localstore.instance;
+    // Map? users = await db.collection('users').get();
+    // for (var user in users!.values){
+    //   if(user['username'] == currUsername){
+    //     user['name'] = enteredName;
+    //     user['surname'] = enteredSurname;
+    //   }
+    //   debugPrint('ALL USERS: $user');
+    // }
+
+    // db.collection('users').delete();
+    // db.collection('users').;
+
+
+
+    await MyController.addUser(
+      User(
+        username: currUsername, 
+        password: user['password'].toString(),
+        name: enteredName.toString(),
+        surname: enteredSurname.toString(),
+        group: user['group'].toString(),
+      ),
+    );
+
+    await MyController.setUserAsActive(currUsername);
+
+    // Navigator.of(context).pop();
+    // Navigator.pushNamed(context, '/profile');
+
+    setState(() async {
+      var user = await MyController.getUserByUsername(currUsername);
+
+      ProfilePage.fullName = '${user['name']} ${user['surname']}';
+    });
   }
 
   
@@ -81,9 +167,11 @@ class _ProfilePageState extends State<ProfilePage> {
     final formHeight = mediaQuery.height * 0.15;
     final formWidth = mediaQuery.width * 0.6;
 
+    
+
     return Scaffold(
       appBar: MyAppBar(
-        title: UserController.getCurrentUsername()!, 
+        title: ProfilePage.usrname, 
         preferredHeight: mediaQuery.height * 0.07,
       ),
       body: Container(
@@ -103,13 +191,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   Container(
                     height: mediaQuery.width * 0.08,
                   ),
-                  // Text(
-                  //     '${await getUserNameAndSurname().$1} '
-                  //     '${getUserNameAndSurname().$2}',
-                  //     style: TextStyle(
-                  //       fontSize: MyFontSize.getFontSize(context, 5),
-                  //     ),
-                  //   ),
+                  Text(
+                      ProfilePage.fullName.toString(),
+                      style: TextStyle(
+                        fontSize: MyFontSize.getFontSize(context, 4)
+                      ),
+                    ),
                 ],
               ),
               Container(
@@ -130,16 +217,33 @@ class _ProfilePageState extends State<ProfilePage> {
                                 mainAxisAlignment: 
                                   MainAxisAlignment.spaceAround,
                                 children: [
-                                  MyInputForm(
+                                  SizedBox(
                                     height: formHeight, 
                                     width: formWidth,
-                                    labelText: 'edit name',
+                                    child: TextFormField(
+                                      decoration: const InputDecoration(
+                                      border: UnderlineInputBorder(),
+                                        labelText: 'name',
+                                      ),
+                                      controller: nameController,
+                                    ),
                                   ),
-                                  MyInputForm(
+                                  
+                                  SizedBox(
                                     height: formHeight, 
                                     width: formWidth,
-                                    labelText: 'edit surname',
-                                  ),  
+                                    child: TextFormField(
+                                      decoration: const InputDecoration(
+                                      border: UnderlineInputBorder(),
+                                        labelText: 'surname',
+                                      ),
+                                      controller: surnameController,
+                                    ),
+                                  ),
+
+
+
+                                  
                                 ],
                               ),
                             ],
@@ -197,9 +301,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ],
                             saveButton: MyAddButton(
-                                    onPressed: () => {
-                                      // save user info
-                                    },
+                                    onPressed: saveUserInfo,
                                     buttonText: 'Save',
                                   ),
                             closeButtonText: 'Close',
