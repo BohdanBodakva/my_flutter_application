@@ -8,6 +8,8 @@ class LoginPage extends StatefulWidget {
   var infoMessage = '';
   var isRegistering = false;
 
+  static bool canBeLoggedIn = true;
+
   var usernameValidatorMessage = '';
   var nameValidatorMessage = '';
   var surnameValidatorMessage = '';
@@ -99,25 +101,32 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     void login()async {
+
+      debugPrint('CAN BE LOGGED IN: ${LoginPage.canBeLoggedIn}');
+
+      if(LoginPage.canBeLoggedIn){
+
+      
         enteredUsername = usernameController.text as String;
         enteredPassword = passwordController.text as String;
         widget.infoMessage = '';
         widget.clearAllValidationMessages();
 
-      if (validateInputFields()){
-        var login = await MyController.checkLogin(enteredUsername, enteredPassword);
-        final loginStatus = login.$1;
-        final info = login.$2;   
-        debugPrint('login status: $loginStatus');  
+        if (validateInputFields()){
+          var login = await MyController.checkLogin(enteredUsername, enteredPassword);
+          final loginStatus = login.$1;
+          final info = login.$2;   
+          debugPrint('login status: $loginStatus');  
 
-        if(loginStatus.toString() == 'true'){
-          MyController.setUserAsActive(enteredUsername);
-          MyController.getCurrentTimeLoggedIn();
-          Navigator.pushNamed(context, '/');
-        } else {
-          setState(() {
-            widget.infoMessage = info.toString();
-          });
+          if(loginStatus.toString() == 'true'){
+            MyController.setUserAsActive(enteredUsername);
+            MyController.getCurrentTimeLoggedIn();
+            Navigator.pushNamed(context, '/');
+          } else {
+            setState(() {
+              widget.infoMessage = info.toString();
+            });
+          }
         }
       }
     }
@@ -155,46 +164,48 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Container(
-        padding: EdgeInsets.only(
-          left: mediaQuery.width * 0.2,
-          right: mediaQuery.width * 0.2,
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                widget.infoMessage,
-                style: const TextStyle(
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: Container(
+          padding: EdgeInsets.only(
+            left: mediaQuery.width * 0.2,
+            right: mediaQuery.width * 0.2,
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  widget.infoMessage,
+                  style: const TextStyle(
                     color: Colors.black,
-                ),
-              ),
-              Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      labelText: 'username',
-                    ),
-                    controller: usernameController,
                   ),
-                  Text(
-                    widget.usernameValidatorMessage,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  )
-                ],
-              ),
-              
-
-              if (widget.isRegistering)
+                ),
                 Column(
                   children: [
                     TextFormField(
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText: 'username',
+                      ),
+                      controller: usernameController,
+                    ),
+                    Text(
+                     widget.usernameValidatorMessage,
+                     style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )
+                  ],
+                ),
+              
+
+                if (widget.isRegistering)
+                  Column(
+                    children: [
+                      TextFormField(
                       decoration: const InputDecoration(
                         border: UnderlineInputBorder(),
                         labelText: 'name',
@@ -315,6 +326,9 @@ class _LoginPageState extends State<LoginPage> {
         
       
       
+    ),
     );
+    
+    
   }
 }

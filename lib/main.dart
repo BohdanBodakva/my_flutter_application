@@ -1,9 +1,11 @@
 // import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // import 'package:localstore/localstore.dart';
 import 'package:my_flutter_application/elements/my_calendar.dart';
 import 'package:my_flutter_application/localstore/MyController.dart';
+import 'package:my_flutter_application/logic/dependency_injection.dart';
 // import 'package:my_flutter_application/logic/user_controller.dart';
 import 'package:my_flutter_application/pages/home.dart';
 import 'package:my_flutter_application/pages/login.dart';
@@ -19,25 +21,19 @@ void main() async {
   if(date == false || date == 'false'){
     initialRoute = '/login';
   } else {
-    debugPrint('NOOOOOOOOOOOOOOOOOOOOOOO: $date');
-  var date1 = DateTime.parse(date);
-  final diff = DateTime.now().difference(date1).inSeconds;
-  debugPrint('DIFFERENCE: $diff');
+    var date1 = DateTime.parse(date);
+    final diff = DateTime.now().difference(date1).inSeconds;
+    debugPrint('DIFFERENCE: $diff');
 
-  
-
-  if (diff < 30){
-    initialRoute = '/';
-  } else {
-    initialRoute = '/login';
+    if (diff < 30){
+      initialRoute = '/';
+    } else {
+      initialRoute = '/login';
+    }
   }
-  }
-  
-
-  debugPrint('INITIAL ROUTE: ${initialRoute}');
-
 
   runApp(MyApp(initialRoute: initialRoute));
+  DependencyInjection.init();
 }
 
 class MyApp extends StatelessWidget {
@@ -111,22 +107,26 @@ class MyAppState extends State<_MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: widget.initialRoute,
-      routes: {
-        '/': (context) => const HomePage(),
-        '/login': (context) => LoginPage(),
-        '/profile': (context) => ProfilePage(),
-        '/calendar': (context) => const MyCalendar(),
-      },
-      theme: ThemeData(
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-      ),
-      themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
-    );
+      return GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: widget.initialRoute,
+        routes: {
+          '/': (context) => const HomePage(),
+          '/login': (context) => LoginPage(),
+          '/profile': (context) => ProfilePage(),
+          '/calendar': (context) => const MyCalendar(),
+        },
+        theme: ThemeData(
+          brightness: Brightness.light,
+        ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+        ),
+        themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
+      );
+    
+
+    
   }
 
   void rebuildApp() {
