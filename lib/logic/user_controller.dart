@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:my_flutter_application/instances/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,9 +10,48 @@ abstract class UserController{
       name: 'Admin',
     );
 
+  static final __users = [
+    __admin,
+  ];
+
+  static Map<String, dynamic> allUsersToJson() {
+    return {
+      'users': __users,
+    };
+  }
+
+  static getAllUsers(dynamic parsedJson) {
+    if (parsedJson == null || parsedJson == ''){
+      return null;
+    }
+
+    return parsedJson['users'];
+  }
+
+
+
+
+
+  static usersFromJson() async {
+
+    for (var usr in __users){
+
+    }
+
+    // if (user == null || user.username == ''){
+    //   return (false, 'User with username "${username}" does not exist');
+    // }
+    // if (user.password == password){
+    //   __currentUsername = user.username;
+    //   return (true, '');
+    // }
+    // return (false, 'Password is wrong');
+  }
+
   static User getAdmin(){
     return __admin;
-  } 
+  }
+  
 
   static String? __currentUsername;
 
@@ -72,7 +110,7 @@ abstract class UserController{
   static Future<(bool, String)> checkLogin(String username, String password) async{
     var prefs = await SharedPreferences.getInstance();
 
-    var data = prefs.getString(username);
+    var data = prefs.getString('users');
 
     if (data == null){
       return (false, 'User with username "${username}" does not exist');

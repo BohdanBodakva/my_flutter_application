@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
                     startTime: TimeOfDay.now(),
                     endTime: TimeOfDay.now(),
                     lectionNumber: 5,
+                    lectionType: '',
                   ),
                   );
 
