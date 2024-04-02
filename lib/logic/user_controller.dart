@@ -8,6 +8,8 @@ abstract class UserController{
       username: 'admin',
       password: 'admin',
       name: 'Admin',
+      group: "admin",
+      surname: "Admin", 
     );
 
   static final __users = [

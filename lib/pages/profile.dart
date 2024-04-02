@@ -9,7 +9,6 @@ import 'package:my_flutter_application/elements/my_app_bar.dart';
 import 'package:my_flutter_application/elements/my_input_form.dart';
 import 'package:my_flutter_application/elements/settings_item.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
-import 'package:my_flutter_application/instances/user.dart';
 import 'package:my_flutter_application/localstore/MyController.dart';
 import 'package:my_flutter_application/logic/user_controller.dart';
 import 'package:my_flutter_application/main.dart';
@@ -59,6 +58,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   var userName = '';
   var userSurname = '';
+  var userPassword = '';
+  var userGroup = '';
 
   // @override
   // void initState() async {
@@ -87,15 +88,17 @@ class _ProfilePageState extends State<ProfilePage> {
     String r = await MyController.getCurrentUsername() as String;
     debugPrint("CURRENT USERNAME 2: $r");
 
-    dynamic user = await MyController.getUserByUsername(r); 
+    dynamic user = await MyController.getActiveUser(); 
 
     debugPrint("USEEEEEEr: ${user}");
+    debugPrint("USEEEEEEr222: ${user['name']}");
 
-    
+    userName = user['name'] as String;
+    userSurname = user['surname'] as String;
 
     setState(() {
       ProfilePage.usrname = r;
-      ProfilePage.fullName = '${user['name']} ${user['surname']}';
+      ProfilePage.fullName = '$userName $userSurname';
     });
   }
 
@@ -108,16 +111,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
     var currUsername = (await MyController.getCurrentUsername()).toString();
 
-    var user = await MyController.getUserByUsername(
-      currUsername,
-    );
+    // var user = await MyController.getUserByUsername(
+    //   currUsername,
+    // );
 
-    debugPrint('THIS USER: $user');
+    // debugPrint('THIS USER: $user');
 
-    user['name'] = enteredName;
-    user['surname'] = enteredSurname;
+    // user['name'] = enteredName;
+    // user['surname'] = enteredSurname;
 
-    debugPrint('THIS USER 2: $user');
+    // debugPrint('THIS USER 2: $user');
 
 
 
@@ -136,26 +139,30 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
 
-    await MyController.addUser(
-      User(
-        username: currUsername, 
-        password: user['password'].toString(),
-        name: enteredName.toString(),
-        surname: enteredSurname.toString(),
-        group: user['group'].toString(),
-      ),
-    );
+    // await MyController.addUser(
+    //   User(
+    //     username: currUsername, 
+    //     password: user['password'].toString(),
+    //     name: enteredName.toString(),
+    //     surname: enteredSurname.toString(),
+    //     group: user['group'].toString(),
+    //   ),
+    // );
 
-    await MyController.setUserAsActive(currUsername);
+    // await MyController.setUserAsActive(currUsername);
 
     // Navigator.of(context).pop();
     // Navigator.pushNamed(context, '/profile');
 
-    setState(() async {
-      var user = await MyController.getUserByUsername(currUsername);
+    // setState(() async {
+    //   var user = await MyController.getUserByUsername(currUsername);
 
-      ProfilePage.fullName = '${user['name']} ${user['surname']}';
-    });
+    //   ProfilePage.fullName = '${user['name']} ${user['surname']}';
+
+      
+    // });
+
+    Navigator.of(context).pop();
   }
 
   

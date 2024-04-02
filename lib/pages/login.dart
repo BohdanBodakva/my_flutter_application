@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:my_flutter_application/api/backend_service.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
+import 'package:my_flutter_application/instances/user.dart';
 import 'package:my_flutter_application/localstore/MyController.dart';
 
 class LoginPage extends StatefulWidget {
@@ -113,25 +115,52 @@ class _LoginPageState extends State<LoginPage> {
         widget.clearAllValidationMessages();
 
         if (validateInputFields()){
-          var login = await MyController.checkLogin(enteredUsername, enteredPassword);
-          final loginStatus = login.$1;
-          final info = login.$2;   
-          debugPrint('login status: $loginStatus');  
+          final user = User(
+            username: enteredUsername, 
+            password: enteredPassword,
+            group: '',
+            name: '',
+            surname: '',
+          );
 
-          if(loginStatus.toString() == 'true'){
-            MyController.setUserAsActive(enteredUsername);
-            MyController.getCurrentTimeLoggedIn();
-            Navigator.pushNamed(context, '/');
-          } else {
-            setState(() {
-              widget.infoMessage = info.toString();
-            });
-          }
+        final login = await BackendService.login(user);
+        final status = login.$1;
+        final registeredUser = login.$2;
+
+        if(status.toString() == 'true'){
+          MyController.setUserAsActive(registeredUser as User);
+          Navigator.pushNamed(context, '/');
+        } else {
+          setState(() {
+            widget.infoMessage = registeredUser.toString();
+          });
+        }
+
+
+
+
+
+
+
+          // var login = await MyController.checkLogin(enteredUsername, enteredPassword);
+          // final loginStatus = login.$1;
+          // final info = login.$2;   
+          // debugPrint('login status: $loginStatus');  
+
+          // if(loginStatus.toString() == 'true'){
+          //   MyController.setUserAsActive(enteredUsername);
+          //   MyController.getCurrentTimeLoggedIn();
+          //   Navigator.pushNamed(context, '/');
+          // } else {
+          //   setState(() {
+          //     widget.infoMessage = info.toString();
+          //   });
+          // }
         }
       }
     }
 
-    void register() async{
+    void register() async {
         enteredUsername = usernameController.text as String;
         enteredPassword = passwordController.text as String;
         enteredName = nameController.text as String;
@@ -140,25 +169,49 @@ class _LoginPageState extends State<LoginPage> {
         widget.infoMessage = '';
         widget.clearAllValidationMessages();
       if(validateInputFields()){
-        var register = await MyController.register(
-          enteredUsername, 
-          enteredPassword,
-          enteredName,
-          enteredSurname,
-          enteredGroup,
+        final user = User(
+          username: enteredUsername, 
+          password: enteredPassword,
+          group: enteredGroup,
+          name: enteredName,
+          surname: enteredSurname,
         );
-        final registerStatus = register.$1;
-        final info = register.$2;   
-        debugPrint('register status: $registerStatus');  
 
-        if(registerStatus.toString() == 'true'){
-          MyController.setUserAsActive(enteredUsername);
+        final register = await BackendService.register(user);
+        final status = register.$1;
+        final registeredUser = register.$2;
+
+        if(status.toString() == 'true'){
+          MyController.setUserAsActive(user);
           Navigator.pushNamed(context, '/');
         } else {
           setState(() {
-            widget.infoMessage = info.toString();
+            widget.infoMessage = registeredUser.toString();
           });
-        }
+        }  
+
+
+
+
+        // var register = await MyController.register(
+        //   enteredUsername, 
+        //   enteredPassword,
+        //   enteredName,
+        //   enteredSurname,
+        //   enteredGroup,
+        // );
+        // final registerStatus = register.$1;
+        // final info = register.$2;   
+        // debugPrint('register status: $registerStatus');  
+
+        // if(registerStatus.toString() == 'true'){
+        //   MyController.setUserAsActive(enteredUsername);
+        //   Navigator.pushNamed(context, '/');
+        // } else {
+        //   setState(() {
+        //     widget.infoMessage = info.toString();
+        //   });
+        // }
       }
     }
 

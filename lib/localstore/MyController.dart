@@ -5,20 +5,20 @@ import 'package:my_flutter_application/instances/user.dart';
 class MyController{
   static final db = Localstore.instance;
 
-  static Future<dynamic> getUserByUsername(String username) async {
-    Map? users = await db.collection('users').get();
+  // static Future<dynamic> getUserByUsername(String username) async {
+  //   Map? users = await db.collection('users').get();
 
     
 
-    for (var user in users!.values.toList().reversed){
-      if(user['username'] == username){
-        return user;
-      }
-      debugPrint('ALL USERS: $user');
-    }
+  //   dynamic user = users!.values.toList().first;
+  //     if(user['username'] == username){
+  //       return user;
+  //     }
+  //     debugPrint('ALL USERS: $user');
+    
 
-    return false;
-  }
+  //   return false;
+  // }
 
   static Future<bool> __checkIfUserAlreadyExists(String username) async {
     Map? users = await db.collection('users').get();
@@ -50,25 +50,39 @@ class MyController{
 
     
 
-    for (var user in users!.values.toList().reversed){
-      
-      debugPrint('___________TTT_____________: $user');
-    }
+    
 
 
 
     return 'username ${user.username} already exist';
   }
 
-  static setUserAsActive(String username) async {
-    // db.collection('activeUser').delete();
+  static setUserAsActive(User user) async {
+    await db.collection('timeLoggedIn').delete();
+    await db.collection('activeUser').delete();
+
     await db.collection('timeLoggedIn').doc().set({
         'time': DateTime.now().toString(),
-      });  
+      });
 
     await db.collection('activeUser').doc().set({
-        'username': username,
+        'username': user.username,
+        'password': user.password,
+        'name': user.name,
+        'surname': user.surname,
+        'group': user.group,
       });
+    
+    // debugPrint("a_c_t_i_v_e: ${db.collection('activeUser').get()}");
+  }
+
+  static getActiveUser() async {
+
+    Map<String, dynamic> activeUsers = (await db.collection('activeUser').get())!;
+
+    var activeUser = activeUsers.values.first;
+
+    return activeUser;
     
     // debugPrint("a_c_t_i_v_e: ${db.collection('activeUser').get()}");
   }
@@ -110,23 +124,23 @@ class MyController{
     
   }
 
-  static checkLogin(String username, String password) async {
-    var isUserExist = await __checkIfUserAlreadyExists(username);
+  // static checkLogin(String username, String password) async {
+  //   var isUserExist = await __checkIfUserAlreadyExists(username);
 
-    if (isUserExist == false){
-      return (false, 'User $username does not exist');
-    }
+  //   if (isUserExist == false){
+  //     return (false, 'User $username does not exist');
+  //   }
 
-    debugPrint('logged: $isUserExist');
+  //   debugPrint('logged: $isUserExist');
 
-    var user = await getUserByUsername(username);
+  //   var user = await getUserByUsername(username);
 
-    if(user['password'] == password){
-      return (true, '');
-    }
+  //   if(user['password'] == password){
+  //     return (true, '');
+  //   }
 
-    return (false, 'Wrong password');
-  }
+  //   return (false, 'Wrong password');
+  // }
 
   static register(String username, String password, String name, String surname, String group) async {
     var isUserExist = await __checkIfUserAlreadyExists(username);
