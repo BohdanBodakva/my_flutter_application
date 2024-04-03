@@ -1,13 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
-import 'package:my_flutter_application/instances/user.dart';
-import 'package:my_flutter_application/logic/user_controller.dart';
+import 'package:my_flutter_application/localstore/MyController.dart';
 
 class LoginPage extends StatefulWidget {
   final dynamic user;
   var infoMessage = '';
   var isRegistering = false;
+
+  static bool canBeLoggedIn = true;
 
   var usernameValidatorMessage = '';
   var nameValidatorMessage = '';
@@ -28,25 +29,21 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final regExp = RegExp(r'[a-zA-Z]');
+  final regExp = RegExp(r'[a-zA-Z0-9_-]');
 
-  // SharedPreferences prefs = 
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _initializeStoredValue();
-  // }
-
-  // Future<void> _initializeStoredValue() async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   final admin = UserController.getAdmin();
-  //   await prefs!.setString('admin', jsonEncode(admin));
-  // }
+  @override
+  void initState(){
+    super.initState();
+    
+  }
 
   @override
   Widget build(BuildContext context) {
 
+    // @override
+    // void initState() async {
+      
+    // }
     
 
     final mediaQuery = MediaQuery.sizeOf(context);
@@ -66,58 +63,70 @@ class _LoginPageState extends State<LoginPage> {
     var enteredGroup = '';
 
     bool validateInputFields(){
+      var validated = true;
+
       if (!textFieldRegex.hasMatch(enteredUsername)){
         setState(() {
           widget.usernameValidatorMessage = 
             'use only letters, digits or underscores';
         });
-        return false;
+        validated = false;
       }
 
       if (widget.isRegistering){
-        if (!textFieldRegex.hasMatch(enteredUsername)){
+        if (!textFieldRegex.hasMatch(enteredName)){
           setState(() {
-            widget.usernameValidatorMessage = 
-              'use only letters, digits or underscores';
+            widget.nameValidatorMessage = 
+              'NAME: use only letters, digits or underscores';
           });
-          return false;
+          validated = false;
         }
-        if (!textFieldRegex.hasMatch(enteredUsername)){
+        if (!textFieldRegex.hasMatch(enteredSurname)){
           setState(() {
-            widget.usernameValidatorMessage = 
+            widget.surnameValidatorMessage = 
               'use only letters, digits or underscores';
           });
-          return false;
+          validated = false;
         }
-        if (!textFieldRegex.hasMatch(enteredUsername)){
+        if (!textFieldRegex.hasMatch(enteredGroup)){
           setState(() {
-            widget.usernameValidatorMessage = 
+            widget.groupValidatorMessage = 
               'use only letters, digits or underscores';
           });
-          return false;
+          validated = false;
         }
       }
 
-      return true;
+      return validated;
     }
 
     void login()async {
+
+      debugPrint('CAN BE LOGGED IN: ${LoginPage.canBeLoggedIn}');
+
+      if(LoginPage.canBeLoggedIn){
+
+      
         enteredUsername = usernameController.text as String;
         enteredPassword = passwordController.text as String;
         widget.infoMessage = '';
         widget.clearAllValidationMessages();
 
-      if (validateInputFields()){
-        var login = await UserController.checkLogin(enteredUsername, enteredPassword);
-        final loginStatus = login.$1;
-        final info = login.$2;   
-        debugPrint('login status: $loginStatus');   
-        if(loginStatus.toString() == 'true'){
-          Navigator.pushNamed(context, '/');
-        } else {
-          setState(() {
-            widget.infoMessage = info.toString();
-          });
+        if (validateInputFields()){
+          var login = await MyController.checkLogin(enteredUsername, enteredPassword);
+          final loginStatus = login.$1;
+          final info = login.$2;   
+          debugPrint('login status: $loginStatus');  
+
+          if(loginStatus.toString() == 'true'){
+            MyController.setUserAsActive(enteredUsername);
+            MyController.getCurrentTimeLoggedIn();
+            Navigator.pushNamed(context, '/');
+          } else {
+            setState(() {
+              widget.infoMessage = info.toString();
+            });
+          }
         }
       }
     }
@@ -131,21 +140,23 @@ class _LoginPageState extends State<LoginPage> {
         widget.infoMessage = '';
         widget.clearAllValidationMessages();
       if(validateInputFields()){
-        var registerStatus = await UserController.addNewUser(
-          User(
-            username: enteredUsername,
-            password: enteredPassword,
-            name: enteredName,
-            surname: enteredSurname,
-            group: enteredGroup,
-          ),
+        var register = await MyController.register(
+          enteredUsername, 
+          enteredPassword,
+          enteredName,
+          enteredSurname,
+          enteredGroup,
         );
-        UserController.setUsernameAsActive(enteredUsername);
-        if(registerStatus == 'User was successfully added'){
+        final registerStatus = register.$1;
+        final info = register.$2;   
+        debugPrint('register status: $registerStatus');  
+
+        if(registerStatus.toString() == 'true'){
+          MyController.setUserAsActive(enteredUsername);
           Navigator.pushNamed(context, '/');
         } else {
           setState(() {
-            widget.infoMessage = registerStatus.toString();
+            widget.infoMessage = info.toString();
           });
         }
       }
@@ -153,86 +164,128 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Container(
-        padding: EdgeInsets.only(
-          left: mediaQuery.width * 0.2,
-          right: mediaQuery.width * 0.2,
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                widget.infoMessage,
-                style: const TextStyle(
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: Container(
+          padding: EdgeInsets.only(
+            left: mediaQuery.width * 0.2,
+            right: mediaQuery.width * 0.2,
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  widget.infoMessage,
+                  style: const TextStyle(
                     color: Colors.black,
+                  ),
                 ),
-              ),
+                Column(
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText: 'username',
+                      ),
+                      controller: usernameController,
+                    ),
+                    Text(
+                     widget.usernameValidatorMessage,
+                     style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )
+                  ],
+                ),
+              
+
+                if (widget.isRegistering)
+                  Column(
+                    children: [
+                      TextFormField(
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText: 'name',
+                      ),
+                      validator: (value) {
+                        enteredName= value??'';
+                      },
+                      controller: nameController,
+                    ),
+                    Text(
+                      widget.nameValidatorMessage,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+                
+              if (widget.isRegistering)
+                Column(
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText: 'surname',
+                      ),
+                      validator: (value) {
+                        enteredSurname= value??'';
+                      },
+                      controller: surnameController,
+                    ),
+                    Text(
+                      widget.surnameValidatorMessage,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+                
+              if (widget.isRegistering)
+                Column(
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText: 'group',
+                      ),
+                      validator: (value) {
+                        enteredGroup = value??'';
+                      },
+                      controller: groupController,
+                    ),
+                    Text(
+                      widget.groupValidatorMessage,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+                
               Column(
                 children: [
                   TextFormField(
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      labelText: 'username',
+                    obscureText: true,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      border: const UnderlineInputBorder(),
+                      labelText: 'password',
                     ),
-                    controller: usernameController,
+                    validator: (value) {
+                      enteredPassword = value??'';
+                    },
+                    controller: passwordController,
                   ),
-                  Text(
-                    widget.usernameValidatorMessage,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  )
                 ],
               ),
               
-
-              if (widget.isRegistering)
-                TextFormField(
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'name',
-                  ),
-                  validator: (value) {
-                    enteredName= value??'';
-                  },
-                  controller: nameController,
-                ),
-              if (widget.isRegistering)  
-                TextFormField(
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'surname',
-                  ),
-                  validator: (value) {
-                    enteredSurname= value??'';
-                  },
-                  controller: surnameController,
-                ),
-              if (widget.isRegistering)  
-                TextFormField(
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'group',
-                  ),
-                  validator: (value) {
-                    enteredGroup = value??'';
-                  },
-                  controller: groupController,
-                ),
-              
-              TextFormField(
-                decoration: InputDecoration(
-                  border: const UnderlineInputBorder(),
-                  labelText: 'password',
-                ),
-                validator: (value) {
-                  enteredPassword = value??'';
-                },
-                controller: passwordController,
-              ),
               ElevatedButton(
                 onPressed: widget.isRegistering ? register : login,
                 child: Text(
@@ -273,6 +326,9 @@ class _LoginPageState extends State<LoginPage> {
         
       
       
+    ),
     );
+    
+    
   }
 }
