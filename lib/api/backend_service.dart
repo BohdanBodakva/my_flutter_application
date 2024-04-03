@@ -68,7 +68,10 @@ class BackendService{
       }
 
 
-    } on TimeoutException catch (e){
+    } on Exception catch (e){
+      debugPrint('TIME_OUT_EXCEPTION');
+
+
       String date = (await MyController.getCurrentTimeLoggedIn()).toString();
       var date1 = DateTime.parse(date);
       final diff = DateTime.now().difference(date1).inSeconds;
