@@ -10,7 +10,7 @@ class LoginPage extends StatefulWidget {
   var infoMessage = '';
   var isRegistering = false;
 
-  static bool canBeLoggedIn = true;
+  static bool isConnectedToInternet = true;
 
   var usernameValidatorMessage = '';
   var nameValidatorMessage = '';
@@ -33,11 +33,39 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final regExp = RegExp(r'[a-zA-Z0-9_-]');
 
+  String autoLoginStatus = 'false';
+
   @override
   void initState(){
     super.initState();
-    
+
+    checkAutoLogin();
   }
+
+
+  void checkAutoLogin(){
+    ()async{
+      final currentUsername = (await MyController.getCurrentUsername()).toString();
+
+      debugPrint('C-USRNAME: $currentUsername');
+
+      if (currentUsername != 'null'){
+      
+
+        autoLoginStatus = (await BackendService.autoLogin(
+          currentUsername,
+        )).$2.toString();
+
+        debugPrint('C-LOGIN: $autoLoginStatus');
+
+        if(autoLoginStatus == 'true'){
+          debugPrint('C-STATUS: true');
+          Navigator.pushNamed(context, '/');
+        }
+      }
+    }();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,9 +132,9 @@ class _LoginPageState extends State<LoginPage> {
 
     void login()async {
 
-      debugPrint('CAN BE LOGGED IN: ${LoginPage.canBeLoggedIn}');
 
-      if(LoginPage.canBeLoggedIn){
+
+      if(true){
 
       
         enteredUsername = usernameController.text as String;
@@ -124,6 +152,7 @@ class _LoginPageState extends State<LoginPage> {
           );
 
         final login = await BackendService.login(user);
+        debugPrint('DDDDDDDDDDDDDDDD: $login');
         final status = login.$1;
         final registeredUser = login.$2;
 
@@ -161,6 +190,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     void register() async {
+      if(LoginPage.isConnectedToInternet){
         enteredUsername = usernameController.text as String;
         enteredPassword = passwordController.text as String;
         enteredName = nameController.text as String;
@@ -212,6 +242,7 @@ class _LoginPageState extends State<LoginPage> {
         //     widget.infoMessage = info.toString();
         //   });
         // }
+      }
       }
     }
 

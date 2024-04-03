@@ -79,13 +79,13 @@ class _ProfilePageState extends State<ProfilePage> {
     MyApp.rootKey.currentState?.rebuildApp();
   }
 
-  void logOut(){
-    MyController.deleteActiveUser();
+  void logOut()async{
+    await MyController.deleteActiveUser();
     Navigator.pushNamed(context, '/login');
   }
 
   Future<void> getCurrentUsername() async {
-    String r = await MyController.getCurrentUsername() as String;
+    String r = (await MyController.getCurrentUsername()) as String;
     debugPrint("CURRENT USERNAME 2: $r");
 
     dynamic user = await MyController.getActiveUser(); 

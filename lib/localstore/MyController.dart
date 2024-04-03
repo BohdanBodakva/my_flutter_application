@@ -78,7 +78,11 @@ class MyController{
 
   static getActiveUser() async {
 
-    Map<String, dynamic> activeUsers = (await db.collection('activeUser').get())!;
+    dynamic activeUsers = (await db.collection('activeUser').get());
+
+    if (activeUsers.toString() == 'null'){
+      return null;
+    }
 
     var activeUser = activeUsers.values.first;
 
@@ -96,6 +100,10 @@ class MyController{
     Map? activeUser = await db.collection('activeUser').get();
 
     debugPrint('AAAAAAAAAAAAANNNNNNNNNNNNNNNNN: $activeUser');
+
+    if (activeUser == null){
+      return null;
+    }
 
     for (var user in activeUser!.values){
       return user['username'];
