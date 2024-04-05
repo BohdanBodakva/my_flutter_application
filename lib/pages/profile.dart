@@ -1,7 +1,4 @@
-
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:my_flutter_application/elements/footer.dart';
 import 'package:my_flutter_application/elements/info_dialog.dart';
 import 'package:my_flutter_application/elements/my_add_button.dart';
@@ -9,7 +6,7 @@ import 'package:my_flutter_application/elements/my_app_bar.dart';
 import 'package:my_flutter_application/elements/my_input_form.dart';
 import 'package:my_flutter_application/elements/settings_item.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
-import 'package:my_flutter_application/localstore/MyController.dart';
+import 'package:my_flutter_application/localstore/my_controller.dart';
 import 'package:my_flutter_application/logic/user_controller.dart';
 import 'package:my_flutter_application/main.dart';
 
@@ -61,20 +58,6 @@ class _ProfilePageState extends State<ProfilePage> {
   var userPassword = '';
   var userGroup = '';
 
-  // @override
-  // void initState() async {
-  //   super.initState();
-  //   // var login = await UserController.getUserByUsername();
-
-  //   // if(login == null){
-  //   //   userName = '';
-  //   //   userSurname = '';
-  //   // } else {
-  //     // userName = login.$1;
-  //     // userSurname = login.$2;
-  //   // }
-  // }
-
   void changeAppMode(){
     MyApp.rootKey.currentState?.rebuildApp();
   }
@@ -110,57 +93,6 @@ class _ProfilePageState extends State<ProfilePage> {
     var enteredSurname = surnameController.text as String;
 
     var currUsername = (await MyController.getCurrentUsername()).toString();
-
-    // var user = await MyController.getUserByUsername(
-    //   currUsername,
-    // );
-
-    // debugPrint('THIS USER: $user');
-
-    // user['name'] = enteredName;
-    // user['surname'] = enteredSurname;
-
-    // debugPrint('THIS USER 2: $user');
-
-
-
-    // final db = Localstore.instance;
-    // Map? users = await db.collection('users').get();
-    // for (var user in users!.values){
-    //   if(user['username'] == currUsername){
-    //     user['name'] = enteredName;
-    //     user['surname'] = enteredSurname;
-    //   }
-    //   debugPrint('ALL USERS: $user');
-    // }
-
-    // db.collection('users').delete();
-    // db.collection('users').;
-
-
-
-    // await MyController.addUser(
-    //   User(
-    //     username: currUsername, 
-    //     password: user['password'].toString(),
-    //     name: enteredName.toString(),
-    //     surname: enteredSurname.toString(),
-    //     group: user['group'].toString(),
-    //   ),
-    // );
-
-    // await MyController.setUserAsActive(currUsername);
-
-    // Navigator.of(context).pop();
-    // Navigator.pushNamed(context, '/profile');
-
-    // setState(() async {
-    //   var user = await MyController.getUserByUsername(currUsername);
-
-    //   ProfilePage.fullName = '${user['name']} ${user['surname']}';
-
-      
-    // });
 
     Navigator.of(context).pop();
   }

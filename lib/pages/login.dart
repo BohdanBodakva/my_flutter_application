@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:my_flutter_application/api/backend_service.dart';
+import 'package:my_flutter_application/api/implementaion/backend_service_impl.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
 import 'package:my_flutter_application/instances/user.dart';
-import 'package:my_flutter_application/localstore/MyController.dart';
+import 'package:my_flutter_application/localstore/my_controller.dart';
 
 class LoginPage extends StatefulWidget {
   final dynamic user;
@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
       if (currentUsername != 'null'){
       
 
-        autoLoginStatus = (await BackendService.autoLogin(
+        autoLoginStatus = (await BackendServiceImpl().autoLogin(
           currentUsername,
         )).$2.toString();
 
@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
             surname: '',
           );
 
-        final login = await BackendService.login(user);
+        final login = await BackendServiceImpl().login(user);
         debugPrint('DDDDDDDDDDDDDDDD: $login');
         final status = login.$1;
         final registeredUser = login.$2;
@@ -207,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
           surname: enteredSurname,
         );
 
-        final register = await BackendService.register(user);
+        final register = await BackendServiceImpl().register(user);
         final status = register.$1;
         final registeredUser = register.$2;
 

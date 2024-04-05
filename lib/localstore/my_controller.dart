@@ -5,21 +5,6 @@ import 'package:my_flutter_application/instances/user.dart';
 class MyController{
   static final db = Localstore.instance;
 
-  // static Future<dynamic> getUserByUsername(String username) async {
-  //   Map? users = await db.collection('users').get();
-
-    
-
-  //   dynamic user = users!.values.toList().first;
-  //     if(user['username'] == username){
-  //       return user;
-  //     }
-  //     debugPrint('ALL USERS: $user');
-    
-
-  //   return false;
-  // }
-
   static Future<bool> __checkIfUserAlreadyExists(String username) async {
     Map? users = await db.collection('users').get();
 
@@ -35,7 +20,6 @@ class MyController{
   }
 
   static addUser(User user) async {
-    // if(! await __checkIfUserAlreadyExists(user.username)){
       db.collection('users').doc().set({
         'username': user.username,
         'password': user.password,
@@ -43,7 +27,6 @@ class MyController{
         'surname': user.surname,
         'group': user.group,
       });
-    // }
 
 
     Map? users = await db.collection('users').get();
@@ -72,8 +55,6 @@ class MyController{
         'surname': user.surname,
         'group': user.group,
       });
-    
-    // debugPrint("a_c_t_i_v_e: ${db.collection('activeUser').get()}");
   }
 
   static getActiveUser() async {
@@ -87,8 +68,6 @@ class MyController{
     var activeUser = activeUsers.values.first;
 
     return activeUser;
-    
-    // debugPrint("a_c_t_i_v_e: ${db.collection('activeUser').get()}");
   }
 
   static deleteActiveUser()async{
@@ -131,24 +110,6 @@ class MyController{
     return t;
     
   }
-
-  // static checkLogin(String username, String password) async {
-  //   var isUserExist = await __checkIfUserAlreadyExists(username);
-
-  //   if (isUserExist == false){
-  //     return (false, 'User $username does not exist');
-  //   }
-
-  //   debugPrint('logged: $isUserExist');
-
-  //   var user = await getUserByUsername(username);
-
-  //   if(user['password'] == password){
-  //     return (true, '');
-  //   }
-
-  //   return (false, 'Wrong password');
-  // }
 
   static register(String username, String password, String name, String surname, String group) async {
     var isUserExist = await __checkIfUserAlreadyExists(username);

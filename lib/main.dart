@@ -46,32 +46,30 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyApp2(initialRoute: initialRoute, key: rootKey),
+      home: MyAppWidget(initialRoute: initialRoute, key: rootKey),
     );
   }
 
   
 }
 
-class MyApp2 extends StatefulWidget {
+class MyAppWidget extends StatefulWidget {
   String initialRoute;
   static bool isConnected = false;
 
-  MyApp2({required this.initialRoute, super.key});
+  MyAppWidget({required this.initialRoute, super.key});
 
   @override
   MyAppState createState() => MyAppState();
 }
 
-class MyAppState extends State<MyApp2> {
+class MyAppState extends State<MyAppWidget> {
   bool darkMode = false;
   String route = '/login';
 
   @override
   void initState() {
     super.initState();
-
-    // route = a().toString();
   }
 
   

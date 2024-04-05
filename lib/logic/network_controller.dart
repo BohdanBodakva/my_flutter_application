@@ -34,7 +34,7 @@ class NetworkController extends GetxController {
 
       if (connectivityResult == ConnectivityResult.none) {
         LoginPage.isConnectedToInternet = false;
-        MyApp2.isConnected = false;
+        MyAppWidget.isConnected = false;
 
         Get.rawSnackbar(
           messageText: const Text(
@@ -55,7 +55,7 @@ class NetworkController extends GetxController {
         return true;
       } else {
         LoginPage.isConnectedToInternet = true;
-        MyApp2.isConnected = true;
+        MyAppWidget.isConnected = true;
 
         if (Get.isSnackbarOpen) {
           Get.closeCurrentSnackbar();
