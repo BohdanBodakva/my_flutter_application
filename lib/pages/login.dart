@@ -1,14 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:my_flutter_application/api/implementaion/backend_service_impl.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
-import 'package:my_flutter_application/localstore/MyController.dart';
+import 'package:my_flutter_application/instances/user.dart';
+import 'package:my_flutter_application/localstore/my_controller.dart';
 
 class LoginPage extends StatefulWidget {
   final dynamic user;
   var infoMessage = '';
   var isRegistering = false;
 
-  static bool canBeLoggedIn = true;
+  static bool isConnectedToInternet = true;
 
   var usernameValidatorMessage = '';
   var nameValidatorMessage = '';
@@ -31,11 +33,39 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final regExp = RegExp(r'[a-zA-Z0-9_-]');
 
+  String autoLoginStatus = 'false';
+
   @override
   void initState(){
     super.initState();
-    
+
+    checkAutoLogin();
   }
+
+
+  void checkAutoLogin(){
+    ()async{
+      final currentUsername = (await MyController.getCurrentUsername()).toString();
+
+      debugPrint('C-USRNAME: $currentUsername');
+
+      if (currentUsername != 'null'){
+      
+
+        autoLoginStatus = (await BackendServiceImpl().autoLogin(
+          currentUsername,
+        )).$2.toString();
+
+        debugPrint('C-LOGIN: $autoLoginStatus');
+
+        if(autoLoginStatus == 'true'){
+          debugPrint('C-STATUS: true');
+          Navigator.pushNamed(context, '/');
+        }
+      }
+    }();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,9 +132,9 @@ class _LoginPageState extends State<LoginPage> {
 
     void login()async {
 
-      debugPrint('CAN BE LOGGED IN: ${LoginPage.canBeLoggedIn}');
 
-      if(LoginPage.canBeLoggedIn){
+
+      if(true){
 
       
         enteredUsername = usernameController.text as String;
@@ -113,25 +143,54 @@ class _LoginPageState extends State<LoginPage> {
         widget.clearAllValidationMessages();
 
         if (validateInputFields()){
-          var login = await MyController.checkLogin(enteredUsername, enteredPassword);
-          final loginStatus = login.$1;
-          final info = login.$2;   
-          debugPrint('login status: $loginStatus');  
+          final user = User(
+            username: enteredUsername, 
+            password: enteredPassword,
+            group: '',
+            name: '',
+            surname: '',
+          );
 
-          if(loginStatus.toString() == 'true'){
-            MyController.setUserAsActive(enteredUsername);
-            MyController.getCurrentTimeLoggedIn();
-            Navigator.pushNamed(context, '/');
-          } else {
-            setState(() {
-              widget.infoMessage = info.toString();
-            });
-          }
+        final login = await BackendServiceImpl().login(user);
+        debugPrint('DDDDDDDDDDDDDDDD: $login');
+        final status = login.$1;
+        final registeredUser = login.$2;
+
+        if(status.toString() == 'true'){
+          MyController.setUserAsActive(registeredUser as User);
+          Navigator.pushNamed(context, '/');
+        } else {
+          setState(() {
+            widget.infoMessage = registeredUser.toString();
+          });
+        }
+
+
+
+
+
+
+
+          // var login = await MyController.checkLogin(enteredUsername, enteredPassword);
+          // final loginStatus = login.$1;
+          // final info = login.$2;   
+          // debugPrint('login status: $loginStatus');  
+
+          // if(loginStatus.toString() == 'true'){
+          //   MyController.setUserAsActive(enteredUsername);
+          //   MyController.getCurrentTimeLoggedIn();
+          //   Navigator.pushNamed(context, '/');
+          // } else {
+          //   setState(() {
+          //     widget.infoMessage = info.toString();
+          //   });
+          // }
         }
       }
     }
 
-    void register() async{
+    void register() async {
+      if(LoginPage.isConnectedToInternet){
         enteredUsername = usernameController.text as String;
         enteredPassword = passwordController.text as String;
         enteredName = nameController.text as String;
@@ -140,25 +199,50 @@ class _LoginPageState extends State<LoginPage> {
         widget.infoMessage = '';
         widget.clearAllValidationMessages();
       if(validateInputFields()){
-        var register = await MyController.register(
-          enteredUsername, 
-          enteredPassword,
-          enteredName,
-          enteredSurname,
-          enteredGroup,
+        final user = User(
+          username: enteredUsername, 
+          password: enteredPassword,
+          group: enteredGroup,
+          name: enteredName,
+          surname: enteredSurname,
         );
-        final registerStatus = register.$1;
-        final info = register.$2;   
-        debugPrint('register status: $registerStatus');  
 
-        if(registerStatus.toString() == 'true'){
-          MyController.setUserAsActive(enteredUsername);
+        final register = await BackendServiceImpl().register(user);
+        final status = register.$1;
+        final registeredUser = register.$2;
+
+        if(status.toString() == 'true'){
+          MyController.setUserAsActive(user);
           Navigator.pushNamed(context, '/');
         } else {
           setState(() {
-            widget.infoMessage = info.toString();
+            widget.infoMessage = registeredUser.toString();
           });
-        }
+        }  
+
+
+
+
+        // var register = await MyController.register(
+        //   enteredUsername, 
+        //   enteredPassword,
+        //   enteredName,
+        //   enteredSurname,
+        //   enteredGroup,
+        // );
+        // final registerStatus = register.$1;
+        // final info = register.$2;   
+        // debugPrint('register status: $registerStatus');  
+
+        // if(registerStatus.toString() == 'true'){
+        //   MyController.setUserAsActive(enteredUsername);
+        //   Navigator.pushNamed(context, '/');
+        // } else {
+        //   setState(() {
+        //     widget.infoMessage = info.toString();
+        //   });
+        // }
+      }
       }
     }
 

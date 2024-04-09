@@ -12,9 +12,9 @@ class User{
   User({
     required this.username,
     required this.password,
-    this.group = '',
-    this.name = '',
-    this.surname = '',
+    required this.group,
+    required this.name,
+    required this.surname,
   });
 
   static User? fromJson(dynamic parsedJson) {
@@ -25,6 +25,9 @@ class User{
     return User(
       username: parsedJson['username'] as String ?? '',
       password: parsedJson['password'] as String ?? '',
+      name: parsedJson['name'] as String ?? '',
+      surname: parsedJson['surname'] as String ?? '',
+      group: parsedJson['group'] as String ?? '',
     );
   }
 
@@ -32,6 +35,9 @@ class User{
     return {
       'username': username,
       'password': password,
+      'name': name,
+      'surname': surname,
+      'group': group,
     };
   }
   

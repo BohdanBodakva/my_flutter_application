@@ -1,36 +1,30 @@
-// import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:localstore/localstore.dart';
 import 'package:my_flutter_application/elements/my_calendar.dart';
-import 'package:my_flutter_application/localstore/MyController.dart';
 import 'package:my_flutter_application/logic/dependency_injection.dart';
-// import 'package:my_flutter_application/logic/user_controller.dart';
 import 'package:my_flutter_application/pages/home.dart';
 import 'package:my_flutter_application/pages/login.dart';
 import 'package:my_flutter_application/pages/profile.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  var initialRoute = '';
+  var initialRoute = '/login';
   
-  var date = (await MyController.getCurrentTimeLoggedIn()).toString();
-  if(date == false || date == 'false'){
-    initialRoute = '/login';
-  } else {
-    var date1 = DateTime.parse(date);
-    final diff = DateTime.now().difference(date1).inSeconds;
-    debugPrint('DIFFERENCE: $diff');
+  // var date = (await MyController.getCurrentTimeLoggedIn()).toString();
+  // if(date == false || date == 'false'){
+  //   initialRoute = '/login';
+  // } else {
+  //   var date1 = DateTime.parse(date);
+  //   final diff = DateTime.now().difference(date1).inSeconds;
+  //   debugPrint('DIFFERENCE: $diff');
 
-    if (diff < 30){
-      initialRoute = '/';
-    } else {
-      initialRoute = '/login';
-    }
-  }
+  //   if (diff < 30){
+  //     initialRoute = '/';
+  //   } else {
+  //     initialRoute = '/login';
+  //   }
+  // }
 
   runApp(MyApp(initialRoute: initialRoute));
   DependencyInjection.init();
@@ -52,64 +46,39 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: _MyApp(initialRoute: initialRoute, key: rootKey),
+      home: MyAppWidget(initialRoute: initialRoute, key: rootKey),
     );
   }
 
   
 }
 
-class _MyApp extends StatefulWidget {
+class MyAppWidget extends StatefulWidget {
   String initialRoute;
+  static bool isConnected = false;
 
-  _MyApp({required this.initialRoute, super.key});
+  MyAppWidget({required this.initialRoute, super.key});
 
   @override
   MyAppState createState() => MyAppState();
 }
 
-class MyAppState extends State<_MyApp> {
+class MyAppState extends State<MyAppWidget> {
   bool darkMode = false;
-  // String initialRoute = '/nnn';
-
-  // Future<bool> a() async {
-  //   String date = (await MyController.getCurrentTimeLoggedIn()).toString();
-  //   debugPrint('NOOOOOOOOOOOOOOOOOOOOOOO: $date');
-  //   var date1 = DateTime.parse(date);
-  //   final diff = DateTime.now().difference(date1).inSeconds;
-  //   debugPrint('DIFFERENCE: $diff');
-
-  //   var initialRoute = true;
-
-  //   if (diff < 30){
-  //     initialRoute = true;
-  //   } else {
-  //     initialRoute = false;
-  //   }
-
-  //   return initialRoute;
-  // }
-
-  // b() {
-  //   return a();
-  // }
-
-  // @override
-  // void initState() {
-  //   // a();
-  //   // super.initState();
-  // }
-
-  
-    
-  
-  
+  String route = '/login';
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  
+  
+  @override
   Widget build(BuildContext context) {
-      return GetMaterialApp(
+      return GetMaterialApp (
         debugShowCheckedModeBanner: false,
-        initialRoute: widget.initialRoute,
+        initialRoute: route,
         routes: {
           '/': (context) => const HomePage(),
           '/login': (context) => LoginPage(),

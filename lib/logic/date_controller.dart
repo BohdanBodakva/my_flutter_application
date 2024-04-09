@@ -39,7 +39,7 @@ class DateController{
       case 3:
         return 'березня';
       case 4:
-        return 'квітеня';
+        return 'квітня';
       case 5:
         return 'травня';
       case 6:

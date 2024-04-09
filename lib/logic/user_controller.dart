@@ -8,6 +8,8 @@ abstract class UserController{
       username: 'admin',
       password: 'admin',
       name: 'Admin',
+      group: "admin",
+      surname: "Admin", 
     );
 
   static final __users = [
@@ -37,15 +39,6 @@ abstract class UserController{
     for (var usr in __users){
 
     }
-
-    // if (user == null || user.username == ''){
-    //   return (false, 'User with username "${username}" does not exist');
-    // }
-    // if (user.password == password){
-    //   __currentUsername = user.username;
-    //   return (true, '');
-    // }
-    // return (false, 'Password is wrong');
   }
 
   static User getAdmin(){
@@ -58,10 +51,6 @@ abstract class UserController{
   static String? getCurrentUsername(){
     return __currentUsername;
   }
-
-  // static List<User> getAllUsers(){
-  //   return __users;
-  // }
 
   static void setUsernameAsActive(String username){
     __currentUsername = username;
@@ -82,28 +71,11 @@ abstract class UserController{
     return user;
   }
 
-  // static bool __checkIfUsernameIsUnique(String username) async{
-  //   var prefs = await SharedPreferences.getInstance();
-  //   User user = User.fromJson(jsonDecode((prefs.getString(username))!));
-
-  //   for (var user in __users){
-  //     if(user.username == username){
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
-
   static Future<String> addNewUser(User user) async{
     var prefs = await SharedPreferences.getInstance();
 
     prefs.setString(user.username, json.encode(user.toJson()));
-
-    // if (!__checkIfUsernameIsUnique(user.username)){
-    //   return 'User with username "${user.username}" already exists';
-    // }
-    // __currentUsername = user.username;
-    // // __users.add(user);
+    
     return 'User was successfully added';
   }
 
