@@ -30,14 +30,19 @@ class UserInfoCubit extends Cubit<UserInfoState>{
     Navigator.pushNamed(context, '/login');
   }
 
-  void changeUserInfo(String username, String newName, String newSurname) async {
+  dynamic changeUserInfo(String username, String newName, String newSurname) async {
     final user = await BackendServiceImpl().updateUserInfo(username, newName, newSurname);
     await MyController.setUserAsActive(User.fromJson(user.$2)!);
 
-    state.name = User.fromJson(user.$2)!.name;
-    state.surname = User.fromJson(user.$2)!.surname;
+    debugPrint('XXXXXXXXXXXXX: ${state.name = User.fromJson(user.$2)!.name}');
 
-    emit(state);
+    emit(UserInfoState(
+      username: state.username,
+      password: state.password,
+      name: User.fromJson(user.$2)!.name,
+      surname: User.fromJson(user.$2)!.surname,
+      group: state.group,
+    ),);
   }
 
   void changePassword(String username, String newPassword) async {

@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:my_flutter_application/bloc/user_info_bloc/user_info_state.dart';
 import 'package:my_flutter_application/enums/user_status.dart';
 
@@ -31,6 +32,18 @@ class User{
   static User? fromJson(dynamic parsedJson) {
     if (parsedJson == null || parsedJson == ''){
       return null;
+    }
+
+    debugPrint('FFFFFFFFFINALLLLLLLLL: ${parsedJson}');
+
+    if(parsedJson is User){
+      return User(
+        username: parsedJson.username as String ?? '',
+        password: parsedJson.password as String ?? '',
+        name: parsedJson.name as String ?? '',
+        surname: parsedJson.surname as String ?? '',
+        group: parsedJson.group as String ?? '',
+      );
     }
 
     return User(

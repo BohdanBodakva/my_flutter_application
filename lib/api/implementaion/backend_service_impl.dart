@@ -97,7 +97,7 @@ class BackendServiceImpl implements BackendService{
 
   Future<dynamic> updateUserInfo(String username, String newName, String newSurname) async {
     final response = await http.put(
-      Uri.parse('${MAIN_URI}/users/register'),
+      Uri.parse('${MAIN_URI}/users/update'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -108,7 +108,7 @@ class BackendServiceImpl implements BackendService{
           surname: newSurname,
           password: '---',
           group: '---',
-        ),
+        ).toJson(),
       ),
     );
 

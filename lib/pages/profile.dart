@@ -138,7 +138,7 @@ class ProfilePage extends StatelessWidget {
                         onPressed: () {
                           showDialog<void>(
                             context: context,
-                            builder: (_) => InfoDialog(
+                            builder: (context) => InfoDialog(
                               title: 'Edit Profile',
                               titleWidgets:[
                                 Column(
@@ -150,9 +150,10 @@ class ProfilePage extends StatelessWidget {
                                       width: formWidth,
                                       child: TextFormField(
                                         decoration: const InputDecoration(
-                                        border: UnderlineInputBorder(),
-                                          labelText: 'name',
-                                        ),
+                                          border: UnderlineInputBorder(),
+                                            labelText: 'name',
+                                            hintText: '',
+                                          ),
                                       controller: nameController,
                                       ),
                                     ),
@@ -226,7 +227,13 @@ class ProfilePage extends StatelessWidget {
                               ],
                               saveButton: MyAddButton(
                                 onPressed: (){
-                                  // saveUserInfo(context);
+                                  context.read<UserInfoCubit>().changeUserInfo(
+                                    state.username,
+                                    nameController.text,
+                                    surnameController.text,
+                                  );
+                                  
+                                  Navigator.of(context).pop();
                                 },
                                 buttonText: 'Save',
                               ),
@@ -319,7 +326,7 @@ class ProfilePage extends StatelessWidget {
                       onPressed: () => {
                         showDialog<void>(
                           context: context,
-                          builder: (_) => InfoDialog(
+                          builder: (context) => InfoDialog(
                             title: 'About this app',
                             titleWidgets: const [Text('sdgdflkgjdfkg')],
                             saveButton: Container(),
