@@ -113,9 +113,9 @@ class MyAppState extends State<MyAppWidget> {
 
   void rebuildApp() {
     darkMode = !darkMode;
-    setState(() {
-      ProfilePage.usrname = ProfilePage.usrname;
-      ProfilePage.fullName = ProfilePage.fullName;
-    });
+    // setState(() {
+    //   ProfilePage.usrname = ProfilePage.usrname;
+    //   ProfilePage.fullName = ProfilePage.fullName;
+    // });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_flutter_application/api/implementaion/backend_service_impl.dart';
 import 'package:my_flutter_application/bloc/user_info_bloc/user_info_state.dart';
@@ -6,11 +7,28 @@ import 'package:my_flutter_application/localstore/my_controller.dart';
 
 class UserInfoCubit extends Cubit<UserInfoState>{
   UserInfoCubit() : super(UserInfoState(
-    name: MyController.getActiveUser()['name'].toString(),
-    surname: MyController.getActiveUser()['surname'].toString(),
-    password: MyController.getActiveUser()['password'].toString(),
-    group: MyController.getActiveUser()['group'].toString(),
+    username: '',
+    name: '',
+    surname: '',
+    password: '',
+    group: '',
   ),);
+
+  void setActiveUser(User user){
+    emit(User.toUserInfoState(user));
+  }
+
+  void logOut(BuildContext context){
+    emit(UserInfoState(
+      username: '',
+      password: '',
+      name: '',
+      surname: '',
+      group: '',
+    ),);
+
+    Navigator.pushNamed(context, '/login');
+  }
 
   void changeUserInfo(String username, String newName, String newSurname) async {
     final user = await BackendServiceImpl().updateUserInfo(username, newName, newSurname);

@@ -79,7 +79,7 @@ class LoginPageCubit extends Cubit<LoginPageState>{
       ];
     }
 
-  void loginUser(String username, String password, BuildContext context) async {
+  dynamic loginUser(String username, String password, BuildContext context) async {
     debugPrint('NNNNNNNNNNNNNNNNNNN: $username + $password');
 
     final input = InputFields();
@@ -104,19 +104,23 @@ class LoginPageCubit extends Cubit<LoginPageState>{
       );
 
       final status = login.$1 as bool;
-      final user = login.$2;
+      final user = login.$2 as User;
 
       debugPrint('NNNNNNNNNNNNNNNNNNN: ${status}');
 
       if(status){
-        MyController.setUserAsActive(user as User);
+        MyController.setUserAsActive(user);
 
         emit(input.toLoginPageState(''));
 
         Navigator.pushNamed(context, '/');
+
+        return user;
       } else {
         debugPrint(returnedInputs.toLoginPageState(user.toString()).toString());
         emit(returnedInputs.toLoginPageState(user.toString()));
+
+        return 'User was not logged in';
       }
 
       
@@ -126,6 +130,8 @@ class LoginPageCubit extends Cubit<LoginPageState>{
       final finalLoginPageState = returnedInputs.toLoginPageState('');
       finalLoginPageState.isRegistering = false;
       emit(finalLoginPageState);
+
+      return 'Validation was failed';
     }
     
     
@@ -133,7 +139,7 @@ class LoginPageCubit extends Cubit<LoginPageState>{
   }
 
 
-  void registerUser(String username, String password, String name, String surname, String group, BuildContext context) async {
+  dynamic registerUser(String username, String password, String name, String surname, String group, BuildContext context) async {
     final input = InputFields();
     input.enteredUsername = username;
     input.enteredPassword = password;
@@ -169,9 +175,12 @@ class LoginPageCubit extends Cubit<LoginPageState>{
         emit(returnedInputs.toLoginPageState(''));
 
         Navigator.pushNamed(context, '/');
-        // Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage()));
+
+        return user;
       } else {
         emit(returnedInputs.toLoginPageState(user.toString()));
+
+        return 'User was not logged in';
       }
 
       
@@ -181,6 +190,8 @@ class LoginPageCubit extends Cubit<LoginPageState>{
       final finalLoginPageState = returnedInputs.toLoginPageState('');
       finalLoginPageState.isRegistering = true;
       emit(finalLoginPageState);
+
+      return 'Validation was failed';
     }
     
     

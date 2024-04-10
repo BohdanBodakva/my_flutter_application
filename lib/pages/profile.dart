@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_flutter_application/bloc/user_info_bloc/user_info_cubit.dart';
+import 'package:my_flutter_application/bloc/user_info_bloc/user_info_state.dart';
 import 'package:my_flutter_application/elements/footer.dart';
 import 'package:my_flutter_application/elements/info_dialog.dart';
 import 'package:my_flutter_application/elements/my_add_button.dart';
@@ -6,15 +9,14 @@ import 'package:my_flutter_application/elements/my_app_bar.dart';
 import 'package:my_flutter_application/elements/my_input_form.dart';
 import 'package:my_flutter_application/elements/settings_item.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
-import 'package:my_flutter_application/localstore/my_controller.dart';
 import 'package:my_flutter_application/logic/user_controller.dart';
 import 'package:my_flutter_application/main.dart';
 
 
 class ProfilePage extends StatelessWidget {
   final dynamic user;
-  static dynamic usrname;
-  static dynamic fullName;
+  String usrname = '';
+  String fullName = '';
 
   Future<(String, String)> getUserNameAndSurname() async {
     
@@ -42,12 +44,6 @@ class ProfilePage extends StatelessWidget {
     'Pineapple',
   ];
 
-  // @override
-  // void initState(){
-  //   super.initState();
-  //   getCurrentUsername();
-  // }
-
   var userName = '';
   var userSurname = '';
   var userPassword = '';
@@ -57,40 +53,35 @@ class ProfilePage extends StatelessWidget {
     MyApp.rootKey.currentState?.rebuildApp();
   }
 
-  void logOut(BuildContext context)async{
-    await MyController.deleteActiveUser();
-    Navigator.pushNamed(context, '/login');
-  }
+  // void logOut(BuildContext context)async{
+  //   await MyController.deleteActiveUser();
+  //   Navigator.pushNamed(context, '/login');
+  // }
 
-  Future<void> getCurrentUsername() async {
-    String r = (await MyController.getCurrentUsername()) as String;
-    debugPrint("CURRENT USERNAME 2: $r");
+  // Future<void> getCurrentUsername() async {
+  //   String r = (await MyController.getCurrentUsername()) as String;
+  //   debugPrint("CURRENT USERNAME 2: $r");
 
-    dynamic user = await MyController.getActiveUser(); 
+  //   dynamic user = await MyController.getActiveUser(); 
 
-    debugPrint("USEEEEEEr: ${user}");
-    debugPrint("USEEEEEEr222: ${user['name']}");
+  //   // debugPrint("USEEEEEEr: ${user}");
+  //   // debugPrint("USEEEEEEr222: ${user['name']}");
 
-    userName = user['name'] as String;
-    userSurname = user['surname'] as String;
-
-    // setState(() {
-    //   ProfilePage.usrname = r;
-    //   ProfilePage.fullName = '$userName $userSurname';
-    // });
-  }
+  //   userName = "user['name'] as String";
+  //   userSurname = "user['surname'] as String";
+  // }
 
   final nameController = TextEditingController();
   final surnameController = TextEditingController();
 
-  saveUserInfo(BuildContext context)async{
-    var enteredName = nameController.text as String;
-    var enteredSurname = surnameController.text as String;
+  // saveUserInfo(BuildContext context)async{
+  //   var enteredName = nameController.text as String;
+  //   var enteredSurname = surnameController.text as String;
 
-    var currUsername = (await MyController.getCurrentUsername()).toString();
+  //   var currUsername = (await MyController.getCurrentUsername()).toString();
 
-    Navigator.of(context).pop();
-  }
+  //   Navigator.of(context).pop();
+  // }
 
   
 
@@ -103,17 +94,20 @@ class ProfilePage extends StatelessWidget {
 
     
 
-    return Scaffold(
+    return BlocBuilder<UserInfoCubit, UserInfoState>(
+          builder: (context, state){
+            return Scaffold(
       appBar: MyAppBar(
-        title: ProfilePage.usrname, 
+        title: state.username, 
         preferredHeight: mediaQuery.height * 0.07,
       ),
+      
       body: Container(
-          padding: EdgeInsets.symmetric(
-            vertical: mediaQuery.height * 0.02,
-            horizontal: mediaQuery.height * 0.05,
-          ),
-          child: Center(
+              padding: EdgeInsets.symmetric(
+              vertical: mediaQuery.height * 0.02,
+              horizontal: mediaQuery.height * 0.05,
+              ),
+            child: Center(
             child: Column(
               children: [
                 Column(
@@ -126,9 +120,9 @@ class ProfilePage extends StatelessWidget {
                       height: mediaQuery.width * 0.08,
                     ),
                     Text(
-                      ProfilePage.fullName.toString(),
+                      '${state.name} ${state.surname}',
                       style: TextStyle(
-                        fontSize: MyFontSize.getFontSize(context, 4)
+                        fontSize: MyFontSize.getFontSize(context, 4),
                       ),
                     ),
                   ],
@@ -232,7 +226,7 @@ class ProfilePage extends StatelessWidget {
                               ],
                               saveButton: MyAddButton(
                                 onPressed: (){
-                                  saveUserInfo(context);
+                                  // saveUserInfo(context);
                                 },
                                 buttonText: 'Save',
                               ),
@@ -339,7 +333,7 @@ class ProfilePage extends StatelessWidget {
                     SettingsItem(
                       itemWidthSubtraction: 0.46,
                       onPressed: (){
-                        logOut(context);
+                        context.read<UserInfoCubit>().logOut(context);
                       },
                       icon: const Icon(Icons.settings),
                       text: 'Log Out',
@@ -354,9 +348,16 @@ class ProfilePage extends StatelessWidget {
         ),
       ),  
       ),
+          
+        
+      
+       
       
       
       bottomNavigationBar: const Footer(),
     );
+          }
+    );
+    
   }
 }

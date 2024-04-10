@@ -4,7 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_flutter_application/api/implementaion/backend_service_impl.dart';
 import 'package:my_flutter_application/bloc/login_page_bloc/login_page_cubit.dart';
 import 'package:my_flutter_application/bloc/login_page_bloc/login_page_state.dart';
+import 'package:my_flutter_application/bloc/user_info_bloc/user_info_cubit.dart';
+import 'package:my_flutter_application/bloc/user_info_bloc/user_info_state.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
+import 'package:my_flutter_application/instances/user.dart';
 import 'package:my_flutter_application/localstore/my_controller.dart';
 
 class LoginPage extends StatelessWidget {
@@ -66,6 +69,8 @@ class LoginPage extends StatelessWidget {
       canPop: false,
       child: BlocBuilder<LoginPageCubit, LoginPageState>(
         builder: (context, state){
+          final currentLoginPageState = state;
+
           return Scaffold(
         resizeToAvoidBottomInset: true,
         body: Container(
@@ -199,11 +204,12 @@ class LoginPage extends StatelessWidget {
                       ),
                 ],
               ),
-              
-              ElevatedButton(
+              BlocBuilder<UserInfoCubit, UserInfoState>(
+                builder: (context, state){
+                  return ElevatedButton(
                     onPressed: 
-                      state.isRegistering ? (){
-                        context.read<LoginPageCubit>().registerUser(
+                      currentLoginPageState.isRegistering ? () async {
+                        final user = await context.read<LoginPageCubit>().registerUser(
                           usernameController.text, 
                           passwordController.text,
                           nameController.text,
@@ -211,17 +217,26 @@ class LoginPage extends StatelessWidget {
                           groupController.text, 
                           context,
                         );
-                      }  : (){
-                        context.read<LoginPageCubit>().loginUser(
+
+                        context.read<UserInfoCubit>().setActiveUser(user as User);
+                      }  : () async {
+                        final user = await context.read<LoginPageCubit>().loginUser(
                           usernameController.text, 
                           passwordController.text, 
                           context,
                         );
+
+                        debugPrint('USR USRNM: ${(user as User).username}');
+
+                        context.read<UserInfoCubit>().setActiveUser(user as User);
                       },
                     child: Text(
-                      state.isRegistering ? 'Register' : 'Log In',
+                      currentLoginPageState.isRegistering ? 'Register' : 'Log In',
                     ),
-                  ),
+                  );
+                },
+              ),
+              
               
 
               RichText(

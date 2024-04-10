@@ -1,4 +1,5 @@
 
+import 'package:my_flutter_application/bloc/user_info_bloc/user_info_state.dart';
 import 'package:my_flutter_application/enums/user_status.dart';
 
 class User{
@@ -16,6 +17,16 @@ class User{
     required this.name,
     required this.surname,
   });
+
+  static UserInfoState toUserInfoState(User user){
+    return UserInfoState(
+      username: user.username,
+      password: user.password,
+      name: user.name,
+      surname: user.surname,
+      group: user.group,
+    );
+  }
 
   static User? fromJson(dynamic parsedJson) {
     if (parsedJson == null || parsedJson == ''){
