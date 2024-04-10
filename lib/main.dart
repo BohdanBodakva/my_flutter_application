@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:my_flutter_application/bloc/login_page_bloc/login_page_cubit.dart';
+import 'package:my_flutter_application/bloc/user_info_bloc/user_info_cubit.dart';
 import 'package:my_flutter_application/elements/my_calendar.dart';
 import 'package:my_flutter_application/logic/dependency_injection.dart';
 import 'package:my_flutter_application/pages/home.dart';
@@ -26,7 +29,17 @@ void main() async {
   //   }
   // }
 
-  runApp(MyApp(initialRoute: initialRoute));
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider<UserInfoCubit>(
+        create: (BuildContext context) => UserInfoCubit(),
+      ),
+      BlocProvider<LoginPageCubit>(
+        create: (BuildContext context) => LoginPageCubit(),
+      ),
+    ], 
+    child: MyApp(initialRoute: initialRoute)) 
+  );
   DependencyInjection.init();
 }
 
@@ -82,7 +95,7 @@ class MyAppState extends State<MyAppWidget> {
         routes: {
           '/': (context) => const HomePage(),
           '/login': (context) => LoginPage(),
-          '/profile': (context) => ProfilePage(),
+          '/profile': (context) =>  ProfilePage(),
           '/calendar': (context) => const MyCalendar(),
         },
         theme: ThemeData(

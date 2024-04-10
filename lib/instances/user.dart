@@ -4,7 +4,7 @@ import 'package:my_flutter_application/enums/user_status.dart';
 class User{
   final String username;
   final UserStatus status = UserStatus.user;
-  final String password;
+  String password;
   String group;
   String name;
   String surname;

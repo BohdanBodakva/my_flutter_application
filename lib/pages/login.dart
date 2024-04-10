@@ -1,49 +1,25 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_flutter_application/api/implementaion/backend_service_impl.dart';
+import 'package:my_flutter_application/bloc/login_page_bloc/login_page_cubit.dart';
+import 'package:my_flutter_application/bloc/login_page_bloc/login_page_state.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
-import 'package:my_flutter_application/instances/user.dart';
 import 'package:my_flutter_application/localstore/my_controller.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   final dynamic user;
   var infoMessage = '';
-  var isRegistering = false;
 
   static bool isConnectedToInternet = true;
 
-  var usernameValidatorMessage = '';
-  var nameValidatorMessage = '';
-  var surnameValidatorMessage = '';
-  var groupValidatorMessage = '';
-
-  void clearAllValidationMessages(){
-    usernameValidatorMessage = '';
-    nameValidatorMessage = '';
-    surnameValidatorMessage = '';
-    groupValidatorMessage = '';
-  }
-
   LoginPage({this.user, super.key});
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
   final regExp = RegExp(r'[a-zA-Z0-9_-]');
 
   String autoLoginStatus = 'false';
 
-  @override
-  void initState(){
-    super.initState();
-
-    checkAutoLogin();
-  }
-
-
-  void checkAutoLogin(){
+  void checkAutoLogin(BuildContext context){
     ()async{
       final currentUsername = (await MyController.getCurrentUsername()).toString();
 
@@ -68,13 +44,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
   @override
-  Widget build(BuildContext context) {
-
-    // @override
-    // void initState() async {
-      
-    // }
-    
+  Widget build(BuildContext context) {    
 
     final mediaQuery = MediaQuery.sizeOf(context);
 
@@ -92,165 +62,11 @@ class _LoginPageState extends State<LoginPage> {
     var enteredSurname = '';
     var enteredGroup = '';
 
-    bool validateInputFields(){
-      var validated = true;
-
-      if (!textFieldRegex.hasMatch(enteredUsername)){
-        setState(() {
-          widget.usernameValidatorMessage = 
-            'use only letters, digits or underscores';
-        });
-        validated = false;
-      }
-
-      if (widget.isRegistering){
-        if (!textFieldRegex.hasMatch(enteredName)){
-          setState(() {
-            widget.nameValidatorMessage = 
-              'NAME: use only letters, digits or underscores';
-          });
-          validated = false;
-        }
-        if (!textFieldRegex.hasMatch(enteredSurname)){
-          setState(() {
-            widget.surnameValidatorMessage = 
-              'use only letters, digits or underscores';
-          });
-          validated = false;
-        }
-        if (!textFieldRegex.hasMatch(enteredGroup)){
-          setState(() {
-            widget.groupValidatorMessage = 
-              'use only letters, digits or underscores';
-          });
-          validated = false;
-        }
-      }
-
-      return validated;
-    }
-
-    void login()async {
-
-
-
-      if(true){
-
-      
-        enteredUsername = usernameController.text as String;
-        enteredPassword = passwordController.text as String;
-        widget.infoMessage = '';
-        widget.clearAllValidationMessages();
-
-        if (validateInputFields()){
-          final user = User(
-            username: enteredUsername, 
-            password: enteredPassword,
-            group: '',
-            name: '',
-            surname: '',
-          );
-
-        final login = await BackendServiceImpl().login(user);
-        debugPrint('DDDDDDDDDDDDDDDD: $login');
-        final status = login.$1;
-        final registeredUser = login.$2;
-
-        if(status.toString() == 'true'){
-          MyController.setUserAsActive(registeredUser as User);
-          Navigator.pushNamed(context, '/');
-        } else {
-          setState(() {
-            widget.infoMessage = registeredUser.toString();
-          });
-        }
-
-
-
-
-
-
-
-          // var login = await MyController.checkLogin(enteredUsername, enteredPassword);
-          // final loginStatus = login.$1;
-          // final info = login.$2;   
-          // debugPrint('login status: $loginStatus');  
-
-          // if(loginStatus.toString() == 'true'){
-          //   MyController.setUserAsActive(enteredUsername);
-          //   MyController.getCurrentTimeLoggedIn();
-          //   Navigator.pushNamed(context, '/');
-          // } else {
-          //   setState(() {
-          //     widget.infoMessage = info.toString();
-          //   });
-          // }
-        }
-      }
-    }
-
-    void register() async {
-      if(LoginPage.isConnectedToInternet){
-        enteredUsername = usernameController.text as String;
-        enteredPassword = passwordController.text as String;
-        enteredName = nameController.text as String;
-        enteredSurname = surnameController.text as String;
-        enteredGroup = groupController.text as String;
-        widget.infoMessage = '';
-        widget.clearAllValidationMessages();
-      if(validateInputFields()){
-        final user = User(
-          username: enteredUsername, 
-          password: enteredPassword,
-          group: enteredGroup,
-          name: enteredName,
-          surname: enteredSurname,
-        );
-
-        final register = await BackendServiceImpl().register(user);
-        final status = register.$1;
-        final registeredUser = register.$2;
-
-        if(status.toString() == 'true'){
-          MyController.setUserAsActive(user);
-          Navigator.pushNamed(context, '/');
-        } else {
-          setState(() {
-            widget.infoMessage = registeredUser.toString();
-          });
-        }  
-
-
-
-
-        // var register = await MyController.register(
-        //   enteredUsername, 
-        //   enteredPassword,
-        //   enteredName,
-        //   enteredSurname,
-        //   enteredGroup,
-        // );
-        // final registerStatus = register.$1;
-        // final info = register.$2;   
-        // debugPrint('register status: $registerStatus');  
-
-        // if(registerStatus.toString() == 'true'){
-        //   MyController.setUserAsActive(enteredUsername);
-        //   Navigator.pushNamed(context, '/');
-        // } else {
-        //   setState(() {
-        //     widget.infoMessage = info.toString();
-        //   });
-        // }
-      }
-      }
-    }
-
-
-
     return PopScope(
       canPop: false,
-      child: Scaffold(
+      child: BlocBuilder<LoginPageCubit, LoginPageState>(
+        builder: (context, state){
+          return Scaffold(
         resizeToAvoidBottomInset: true,
         body: Container(
           padding: EdgeInsets.only(
@@ -262,11 +78,12 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  widget.infoMessage,
-                  style: const TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
+                      state.infoMessage,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                
                 Column(
                   children: [
                     TextFormField(
@@ -277,16 +94,17 @@ class _LoginPageState extends State<LoginPage> {
                       controller: usernameController,
                     ),
                     Text(
-                     widget.usernameValidatorMessage,
-                     style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    )
+                        state.usernameValidator,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                    ),
+                    
                   ],
                 ),
-              
-
-                if (widget.isRegistering)
+                Column(
+                      children: [
+                        if (state.isRegistering)
                   Column(
                     children: [
                       TextFormField(
@@ -299,16 +117,17 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       controller: nameController,
                     ),
-                    Text(
-                      widget.nameValidatorMessage,
-                      style: const TextStyle(
-                        color: Colors.black,
+                      Text(
+                        state.nameValidator,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
+                    
                   ],
                 ),
                 
-              if (widget.isRegistering)
+              if (state.isRegistering)
                 Column(
                   children: [
                     TextFormField(
@@ -322,15 +141,16 @@ class _LoginPageState extends State<LoginPage> {
                       controller: surnameController,
                     ),
                     Text(
-                      widget.surnameValidatorMessage,
-                      style: const TextStyle(
-                        color: Colors.black,
+                        state.surnameValidator,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
+                  
                   ],
                 ),
                 
-              if (widget.isRegistering)
+              if (state.isRegistering)
                 Column(
                   children: [
                     TextFormField(
@@ -344,13 +164,17 @@ class _LoginPageState extends State<LoginPage> {
                       controller: groupController,
                     ),
                     Text(
-                      widget.groupValidatorMessage,
-                      style: const TextStyle(
-                        color: Colors.black,
+                        state.groupValidator,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
+                    
                   ],
                 ),
+                      ],
+                ),
+                
                 
               Column(
                 children: [
@@ -367,37 +191,59 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     controller: passwordController,
                   ),
+                  Text(
+                        state.passwordValidator,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
                 ],
               ),
               
               ElevatedButton(
-                onPressed: widget.isRegistering ? register : login,
-                child: Text(
-                  widget.isRegistering ? 'Register' : 'Log In',
-                ),
-              ),
-
+                    onPressed: 
+                      state.isRegistering ? (){
+                        context.read<LoginPageCubit>().registerUser(
+                          usernameController.text, 
+                          passwordController.text,
+                          nameController.text,
+                          surnameController.text,
+                          groupController.text, 
+                          context,
+                        );
+                      }  : (){
+                        context.read<LoginPageCubit>().loginUser(
+                          usernameController.text, 
+                          passwordController.text, 
+                          context,
+                        );
+                      },
+                    child: Text(
+                      state.isRegistering ? 'Register' : 'Log In',
+                    ),
+                  ),
+              
 
               RichText(
-                text: TextSpan(
-                  text: !widget.isRegistering ? 
-                  'Do not have an account? Register' :
-                  'Already have an account? Log In',
-                  style: TextStyle(
-                    fontSize: MyFontSize.getFontSize(context, 1),
-                    color: Colors.black
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      setState(() {
-                        widget.infoMessage = '';
-                        widget.clearAllValidationMessages();
-                        widget.isRegistering = !widget.isRegistering;
-                      });
-                    },
-                ),
+                    text: TextSpan(
+                      text: !state.isRegistering ? 
+                      'Do not have an account? Register' :
+                      'Already have an account? Log In',
+                      style: TextStyle(
+                        fontSize: MyFontSize.getFontSize(context, 1),
+                        color: Colors.black
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                            context.read<LoginPageCubit>().changeRegisterStatus();
+                        },
+                        
+              ),
                 
-              )
+              ),
+                
+              
+              
               
 
 
@@ -410,7 +256,10 @@ class _LoginPageState extends State<LoginPage> {
         
       
       
-    ),
+    );
+        },
+      ),
+      
     );
     
     

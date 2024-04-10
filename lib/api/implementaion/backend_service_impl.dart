@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:my_flutter_application/localstore/my_controller.dart';
 
 class BackendServiceImpl implements BackendService{
-  String MAIN_URI = 'http://192.168.0.223:8080/api';
+  String MAIN_URI = 'http://10.129.148.41:8080/api';
 
   Future<dynamic> login(User user) async {
     final response = await http.post(
@@ -86,10 +86,99 @@ class BackendServiceImpl implements BackendService{
       } else {
         return (false, false);
       }
+    }    
+  }
+
+
+
+
+
+
+
+  Future<dynamic> updateUserInfo(String username, String newName, String newSurname) async {
+    final response = await http.put(
+      Uri.parse('${MAIN_URI}/users/register'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        User(
+          username: username,
+          name: newName,
+          surname: newSurname,
+          password: '---',
+          group: '---',
+        ),
+      ),
+    );
+
+    debugPrint('YYYYYYY: ${response.body}');
+
+    if (response.statusCode == 200) {
+      return (true, User.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>,
+      )!);
+    } else {
+      return (false, response.body);
     }
 
-    
+  }
 
-    
+  Future<dynamic> updatePassword(String username, String newPassword) async {
+    final response = await http.put(
+      Uri.parse('${MAIN_URI}/users/register'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        User(
+          username: username,
+          name: '---',
+          surname: '---',
+          password: newPassword,
+          group: '---',
+        ),
+      ),
+    );
+
+    debugPrint('YYYYYYY: ${response.body}');
+
+    if (response.statusCode == 200) {
+      return (true, User.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>,
+      )!);
+    } else {
+      return (false, response.body);
+    }
+
+  }
+
+  Future<dynamic> updateGroup(String username, String newGroup) async {
+    final response = await http.put(
+      Uri.parse('${MAIN_URI}/users/register'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        User(
+          username: username,
+          name: '---',
+          surname: '---',
+          password: '---',
+          group: newGroup,
+        ),
+      ),
+    );
+
+    debugPrint('YYYYYYY: ${response.body}');
+
+    if (response.statusCode == 200) {
+      return (true, User.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>,
+      )!);
+    } else {
+      return (false, response.body);
+    }
+
   }
 }
