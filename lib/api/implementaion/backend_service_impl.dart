@@ -10,6 +10,23 @@ import 'package:my_flutter_application/localstore/my_controller.dart';
 class BackendServiceImpl implements BackendService{
   String MAIN_URI = 'http://10.129.148.41:8080/api';
 
+  Future<dynamic> getUserByUsername(String username) async {
+    final response = await http.get(
+      Uri.parse('${MAIN_URI}/users/$username'),
+    );
+
+    debugPrint('DDDDDD!!!!!!!!!!!!!: ${response.body}');
+
+    if (response.statusCode == 200) {
+      return (true, User.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>,
+      )!);
+    } else {
+      return (false, response.body);
+    }
+
+  }
+
   Future<dynamic> login(User user) async {
     final response = await http.post(
       Uri.parse('${MAIN_URI}/users/login'),

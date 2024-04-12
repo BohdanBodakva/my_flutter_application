@@ -212,6 +212,7 @@ class LoginPageCubit extends Cubit<LoginPageState>{
         )).$2.toString();
 
         if(autoLoginStatus == 'true'){
+          // context.read<UserInfoCubit>().setActiveUser();
           Navigator.pushNamed(context, '/');
         }
       }

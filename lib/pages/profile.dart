@@ -10,7 +10,6 @@ import 'package:my_flutter_application/elements/my_input_form.dart';
 import 'package:my_flutter_application/elements/settings_item.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
 import 'package:my_flutter_application/logic/user_controller.dart';
-import 'package:my_flutter_application/main.dart';
 
 
 class ProfilePage extends StatelessWidget {
@@ -50,7 +49,7 @@ class ProfilePage extends StatelessWidget {
   var userGroup = '';
 
   void changeAppMode(){
-    MyApp.rootKey.currentState?.rebuildApp();
+    // MyApp.rootKey.currentState?.rebuildApp();
   }
 
   // void logOut(BuildContext context)async{
@@ -313,9 +312,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                     SettingsItem(
                       onPressed: changeAppMode,
-                      icon: MyApp.rootKey.currentState!.darkMode ? 
-                        const Icon(Icons.dark_mode) : 
-                        const Icon(Icons.light_mode),
+                      icon: const Icon(Icons.light_mode),
                       text: 'Change app mode',
                     ),
                     Row(

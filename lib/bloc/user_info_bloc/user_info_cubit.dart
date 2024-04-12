@@ -18,6 +18,18 @@ class UserInfoCubit extends Cubit<UserInfoState>{
     emit(User.toUserInfoState(user));
   }
 
+  void setActiveUserByUsername(String username) async {
+    final response = (await BackendServiceImpl().getUserByUsername(username)).$2;
+
+    if (response is String){
+      debugPrint('USER IS STRING: $response');
+    } else {
+      emit(User.toUserInfoState(response as User));
+    }
+
+    
+  }
+
   void logOut(BuildContext context){
     emit(UserInfoState(
       username: '',
