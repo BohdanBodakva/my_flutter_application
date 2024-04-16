@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_flutter_application/bloc/user_info_bloc/user_info_cubit.dart';
+import 'package:my_flutter_application/bloc/user_info_bloc/user_info_state.dart';
 import 'package:my_flutter_application/elements/footer.dart';
 import 'package:my_flutter_application/elements/info_dialog.dart';
 import 'package:my_flutter_application/elements/my_add_button.dart';
@@ -6,15 +9,13 @@ import 'package:my_flutter_application/elements/my_app_bar.dart';
 import 'package:my_flutter_application/elements/my_input_form.dart';
 import 'package:my_flutter_application/elements/settings_item.dart';
 import 'package:my_flutter_application/enums/font_size.dart';
-import 'package:my_flutter_application/localstore/my_controller.dart';
 import 'package:my_flutter_application/logic/user_controller.dart';
-import 'package:my_flutter_application/main.dart';
 
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
   final dynamic user;
-  static dynamic usrname;
-  static dynamic fullName;
+  String usrname = '';
+  String fullName = '';
 
   Future<(String, String)> getUserNameAndSurname() async {
     
@@ -32,11 +33,6 @@ class ProfilePage extends StatefulWidget {
 
   ProfilePage({this.user, super.key});
 
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
   String dropdownvalue = 'Apple';
   var items = [
     'Apple',
@@ -47,55 +43,44 @@ class _ProfilePageState extends State<ProfilePage> {
     'Pineapple',
   ];
 
-  @override
-  void initState(){
-    super.initState();
-    getCurrentUsername();
-  }
-
   var userName = '';
   var userSurname = '';
   var userPassword = '';
   var userGroup = '';
 
   void changeAppMode(){
-    MyApp.rootKey.currentState?.rebuildApp();
+    // MyApp.rootKey.currentState?.rebuildApp();
   }
 
-  void logOut()async{
-    await MyController.deleteActiveUser();
-    Navigator.pushNamed(context, '/login');
-  }
+  // void logOut(BuildContext context)async{
+  //   await MyController.deleteActiveUser();
+  //   Navigator.pushNamed(context, '/login');
+  // }
 
-  Future<void> getCurrentUsername() async {
-    String r = (await MyController.getCurrentUsername()) as String;
-    debugPrint("CURRENT USERNAME 2: $r");
+  // Future<void> getCurrentUsername() async {
+  //   String r = (await MyController.getCurrentUsername()) as String;
+  //   debugPrint("CURRENT USERNAME 2: $r");
 
-    dynamic user = await MyController.getActiveUser(); 
+  //   dynamic user = await MyController.getActiveUser(); 
 
-    debugPrint("USEEEEEEr: ${user}");
-    debugPrint("USEEEEEEr222: ${user['name']}");
+  //   // debugPrint("USEEEEEEr: ${user}");
+  //   // debugPrint("USEEEEEEr222: ${user['name']}");
 
-    userName = user['name'] as String;
-    userSurname = user['surname'] as String;
-
-    setState(() {
-      ProfilePage.usrname = r;
-      ProfilePage.fullName = '$userName $userSurname';
-    });
-  }
+  //   userName = "user['name'] as String";
+  //   userSurname = "user['surname'] as String";
+  // }
 
   final nameController = TextEditingController();
   final surnameController = TextEditingController();
 
-  saveUserInfo()async{
-    var enteredName = nameController.text as String;
-    var enteredSurname = surnameController.text as String;
+  // saveUserInfo(BuildContext context)async{
+  //   var enteredName = nameController.text as String;
+  //   var enteredSurname = surnameController.text as String;
 
-    var currUsername = (await MyController.getCurrentUsername()).toString();
+  //   var currUsername = (await MyController.getCurrentUsername()).toString();
 
-    Navigator.of(context).pop();
-  }
+  //   Navigator.of(context).pop();
+  // }
 
   
 
@@ -108,92 +93,92 @@ class _ProfilePageState extends State<ProfilePage> {
 
     
 
-    return Scaffold(
+    return BlocBuilder<UserInfoCubit, UserInfoState>(
+          builder: (context, state){
+            return Scaffold(
       appBar: MyAppBar(
-        title: ProfilePage.usrname, 
+        title: state.username, 
         preferredHeight: mediaQuery.height * 0.07,
       ),
+      
       body: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: mediaQuery.height * 0.02,
-          horizontal: mediaQuery.height * 0.05,
-        ),
-        child: Center(
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  SizedBox(
-                    width: mediaQuery.width * 0.29,
-                    child: Image.asset('assets/user.png'),
-                  ),
-                  Container(
-                    height: mediaQuery.width * 0.08,
-                  ),
-                  Text(
-                      ProfilePage.fullName.toString(),
+              padding: EdgeInsets.symmetric(
+              vertical: mediaQuery.height * 0.02,
+              horizontal: mediaQuery.height * 0.05,
+              ),
+            child: Center(
+            child: Column(
+              children: [
+                Column(
+                  children: [
+                    SizedBox(
+                      width: mediaQuery.width * 0.29,
+                      child: Image.asset('assets/user.png'),
+                    ),
+                    Container(
+                      height: mediaQuery.width * 0.08,
+                    ),
+                    Text(
+                      '${state.name} ${state.surname}',
                       style: TextStyle(
-                        fontSize: MyFontSize.getFontSize(context, 4)
+                        fontSize: MyFontSize.getFontSize(context, 4),
                       ),
                     ),
-                ],
-              ),
-              Container(
-                height: mediaQuery.height * 0.03,
-              ),
-              SizedBox(
-                height: mediaQuery.height * 0.47,
-                child: Column(
-                  children: [
-                    SettingsItem(
-                      onPressed: () {
-                        showDialog<void>(
-                          context: context,
-                          builder: (_) => InfoDialog(
-                            title: 'Edit Profile',
-                            titleWidgets:[
-                              Column(
-                                mainAxisAlignment: 
-                                  MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizedBox(
-                                    height: formHeight, 
-                                    width: formWidth,
-                                    child: TextFormField(
-                                      decoration: const InputDecoration(
-                                      border: UnderlineInputBorder(),
-                                        labelText: 'name',
-                                      ),
+                  ],
+                ),
+                Container(
+                  height: mediaQuery.height * 0.03,
+                ),
+                SizedBox(
+                  height: mediaQuery.height * 0.47,
+                  child: Column(
+                    children: [
+                      SettingsItem(
+                        onPressed: () {
+                          showDialog<void>(
+                            context: context,
+                            builder: (context) => InfoDialog(
+                              title: 'Edit Profile',
+                              titleWidgets:[
+                                Column(
+                                  mainAxisAlignment: 
+                                    MainAxisAlignment.spaceAround,
+                                  children: [
+                                    SizedBox(
+                                      height: formHeight, 
+                                      width: formWidth,
+                                      child: TextFormField(
+                                        decoration: const InputDecoration(
+                                          border: UnderlineInputBorder(),
+                                            labelText: 'name',
+                                            hintText: '',
+                                          ),
                                       controller: nameController,
-                                    ),
-                                  ),
-                                  
-                                  SizedBox(
-                                    height: formHeight, 
-                                    width: formWidth,
-                                    child: TextFormField(
-                                      decoration: const InputDecoration(
-                                      border: UnderlineInputBorder(),
-                                        labelText: 'surname',
                                       ),
-                                      controller: surnameController,
                                     ),
-                                  ),
-
-
-
                                   
-                                ],
-                              ),
-                            ],
-                            bottomWidgets: [
-                              Container(
-                                height: 35,
-                              ),
-                              Center(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    showDialog<void>(
+                                    SizedBox(
+                                      height: formHeight, 
+                                      width: formWidth,
+                                      child: TextFormField(
+                                        decoration: const InputDecoration(
+                                          border: UnderlineInputBorder(),
+                                          labelText: 'surname',
+                                        ),
+                                        controller: surnameController,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                              bottomWidgets: [
+                                Container(
+                                  height: 35,
+                                ),
+                                Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showDialog<void>(
                                         context: context,
                                         builder: (_) => InfoDialog(
                                           title: 'Change password',
@@ -226,37 +211,45 @@ class _ProfilePageState extends State<ProfilePage> {
                                           type: 1,
                                         ),
                                       );
-                                  },
-                                  child: Text(
-                                    'Change password',
-                                    style: TextStyle(
-                                      fontSize: 
-                                        MyFontSize.getFontSize(context, 1),
-                                      decoration: TextDecoration. underline,
-                                      color: Colors.blue,
+                                    },
+                                    child: Text(
+                                      'Change password',
+                                      style: TextStyle(
+                                        fontSize: 
+                                          MyFontSize.getFontSize(context, 1),
+                                        decoration: TextDecoration. underline,
+                                        color: Colors.blue,
+                                      ),
                                     ),
                                   ),
                                 ),
+                              ],
+                              saveButton: MyAddButton(
+                                onPressed: (){
+                                  context.read<UserInfoCubit>().changeUserInfo(
+                                    state.username,
+                                    nameController.text,
+                                    surnameController.text,
+                                  );
+                                  
+                                  Navigator.of(context).pop();
+                                },
+                                buttonText: 'Save',
                               ),
-                            ],
-                            saveButton: MyAddButton(
-                                    onPressed: saveUserInfo,
-                                    buttonText: 'Save',
-                                  ),
-                            closeButtonText: 'Close',
-                            type: 1,
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.person),
-                      text: 'Edit profile info',
-                    ),
-                    SettingsItem(
-                      onPressed: () {
-                        showDialog<void>(
-                          context: context,
-                          builder: (_) => InfoDialog(
-                            title: 'Change group',
+                              closeButtonText: 'Close',
+                              type: 1,
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.person),
+                        text: 'Edit profile info',
+                      ),
+                      SettingsItem(
+                        onPressed: () {
+                          showDialog<void>(
+                            context: context,
+                            builder: (_) => InfoDialog(
+                              title: 'Change group',
                             titleWidgets:[
                               Column(
                                 mainAxisAlignment: 
@@ -284,9 +277,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             .toList(),
                         value: dropdownvalue,
                         onChanged: (String? newValue) {
-                          setState(() {
-                            dropdownvalue = newValue!;
-                          });
+                          // setState(() {
+                          //   dropdownvalue = newValue!;
+                          // });
                         },
                       ),
                     ),
@@ -319,9 +312,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     SettingsItem(
                       onPressed: changeAppMode,
-                      icon: MyApp.rootKey.currentState!.darkMode ? 
-                        const Icon(Icons.dark_mode) : 
-                        const Icon(Icons.light_mode),
+                      icon: const Icon(Icons.light_mode),
                       text: 'Change app mode',
                     ),
                     Row(
@@ -332,7 +323,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       onPressed: () => {
                         showDialog<void>(
                           context: context,
-                          builder: (_) => InfoDialog(
+                          builder: (context) => InfoDialog(
                             title: 'About this app',
                             titleWidgets: const [Text('sdgdflkgjdfkg')],
                             saveButton: Container(),
@@ -345,7 +336,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     SettingsItem(
                       itemWidthSubtraction: 0.46,
-                      onPressed: logOut,
+                      onPressed: (){
+                        context.read<UserInfoCubit>().logOut(context);
+                      },
                       icon: const Icon(Icons.settings),
                       text: 'Log Out',
                     ),
@@ -359,7 +352,16 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),  
       ),
+          
+        
+      
+       
+      
+      
       bottomNavigationBar: const Footer(),
     );
+          }
+    );
+    
   }
 }

@@ -5,7 +5,7 @@ import 'package:my_flutter_application/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(MyApp(initialRoute: '/'));
+    await tester.pumpWidget(MyApp(initialRoute: '/', currentUsername: '',));
     // await tester.pumpWidget(MyApp());
 
     expect(find.text('0'), findsOneWidget);
